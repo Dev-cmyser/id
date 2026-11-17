@@ -1,0 +1,21 @@
+$bog_id_demo $mol_page
+	title @ \Вход через Гипер ID
+	plugins /
+		<= Theme $mol_theme_auto
+	body /
+		<= Provider_label $mol_labeler
+			title @ \Провайдер
+			content /
+				<= Provider $mol_string
+					value? <=> provider? \https://b-on-g.github.io/id/
+		<= Login $mol_button_major
+			title @ \Войти через Гипер ID
+			click? <=> login? null
+		<= Status $mol_paragraph
+			title <= status \
+		<= Note $mol_textarea
+			hint @ \Заметка в выданном ленде
+			enabled <= note_enabled false
+			value? <=> note? \
+	status_out @ \Не вошли
+	status_in @ \{lord}, права: {tier}

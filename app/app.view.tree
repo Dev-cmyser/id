@@ -1,0 +1,39 @@
+$bog_id_app $mol_page
+	title @ \Гипер ID
+	plugins /
+		<= Theme $mol_theme_auto
+	body /
+		<= Consent $mol_list
+			rows /
+				<= Consent_text $mol_paragraph
+					title <= consent_text \
+				<= Consent_tools $mol_row
+					sub /
+						<= Approve $mol_button_major
+							title @ \Разрешить
+							enabled <= approve_enabled true
+							click? <=> approve? null
+						<= Reject $mol_button_minor
+							title @ \Отклонить
+							click? <=> reject? null
+		<= Lord_label $mol_labeler
+			title @ \Ваш лорд
+			content /
+				<= Lord $mol_paragraph
+					title <= lord \
+		<= Grants_label $mol_labeler
+			title @ \Подключённые приложения
+			content /
+				<= Grants $mol_list
+					rows <= grant_rows /
+						<= Grant* $mol_row
+							sub /
+								<= Grant_origin* $mol_paragraph
+									title <= grant_origin* \
+								<= Grant_scope* $mol_paragraph
+									title <= grant_scope* \
+								<= Grant_revoke* $mol_button_minor
+									title @ \Отозвать
+									enabled <= grant_active* true
+									click? <=> grant_revoke*? null
+	consent_template @ \{origin} просит доступ «{scope}»
