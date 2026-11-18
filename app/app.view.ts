@@ -25,8 +25,8 @@ namespace $.$$ {
 			return this.$.$giper_baza_glob
 		}
 
-		profile() {
-			return this.glob().home().land().Data( $bog_id_profile )
+		profile( auto?: 'auto' ) {
+			return this.$.$bog_id_profile_of( this.lord(), auto )
 		}
 
 		@ $mol_mem
@@ -35,11 +35,12 @@ namespace $.$$ {
 		}
 
 		name( next?: string ) {
-			return this.profile().Name( next )?.val( next ) ?? ''
+			if( next === undefined ) return this.profile()?.Name()?.val() ?? ''
+			return this.profile( 'auto' )!.Name( 'auto' )!.val( next ) ?? ''
 		}
 
 		stores() {
-			return ( this.profile().Stores()?.items() ?? [] )
+			return ( this.profile()?.Stores()?.items() ?? [] )
 				.map( link => this.glob().Land( new $giper_baza_link( String( link ) ) ).Data( $bog_id_store ) )
 		}
 
@@ -50,7 +51,7 @@ namespace $.$$ {
 			if( found ) return found
 
 			const land = this.glob().land_grab([[ null, $giper_baza_rank_deny ]])
-			this.profile().Stores( 'auto' )!.add( land.link().str )
+			this.profile( 'auto' )!.Stores( 'auto' )!.add( land.link().str )
 
 			return land.Data( $bog_id_store )
 		}
@@ -342,11 +343,12 @@ namespace $.$$ {
 		}
 
 		vault( next?: string ) {
-			return this.profile().Vault( next )?.val( next ) ?? ''
+			if( next === undefined ) return this.profile()?.Vault()?.val() ?? ''
+			return this.profile( 'auto' )!.Vault( 'auto' )!.val( next ) ?? ''
 		}
 
 		vault_of( lord: string ) {
-			return this.glob().Land( new $giper_baza_link( lord ) ).Data( $bog_id_profile ).Vault()?.val() ?? ''
+			return this.$.$bog_id_profile_of( lord )?.Vault()?.val() ?? ''
 		}
 
 		passkey_salt() {

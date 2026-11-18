@@ -25,6 +25,8 @@ namespace $.$$ {
 			const second = await $mol_wire_async( app ).grant_save()
 
 			$mol_assert_equal( first.name, 'Кирилл' )
+			$mol_assert_equal( $.$bog_id_profile_of( app.lord() )?.Name()?.val(), 'Кирилл' )
+			$mol_assert_equal( $.$giper_baza_glob.home().land().Data( $bog_id_profile ).Name()?.val() ?? '', '' )
 			$mol_assert_equal( second.pointer, first.pointer )
 			$mol_assert_equal( app.grants().length, 1 )
 

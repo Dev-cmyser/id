@@ -49,11 +49,17 @@ namespace $.$$ {
 			return ( this.tier() ?? $giper_baza_rank_tier.deny ) >= $giper_baza_rank_tier.post
 		}
 
+		user_name() {
+			const grant = this.grant()
+			if( !grant ) return ''
+			return this.$.$bog_id_profile_of( grant.lord )?.Name()?.val() || grant.name || grant.lord
+		}
+
 		status() {
 			const grant = this.grant()
 			if( !grant?.pointer ) return this.status_out()
 			return this.status_in()
-				.replace( '{name}', grant.name || grant.lord )
+				.replace( '{name}', this.user_name() )
 				.replace( '{tier}', $giper_baza_rank_tier[ this.tier() ?? 0 ] )
 		}
 
