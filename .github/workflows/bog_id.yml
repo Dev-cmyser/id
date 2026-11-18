@@ -19,12 +19,13 @@ jobs:
             - uses: hyoo-ru/mam_build@master2
               with:
                   package: "bog/id"
-                  modules: 'app demo'
+                  modules: 'app demo demo2'
 
             - name: Collect
               run: |
                   cp -r bog/id/app/- site
                   cp -r bog/id/demo/- site/demo
+                  cp -r bog/id/demo2/- site/demo2
 
             - uses: hyoo-ru/gh-deploy@v4.4.1
               if: github.ref == 'refs/heads/main'

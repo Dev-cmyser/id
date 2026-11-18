@@ -29,8 +29,8 @@ namespace $.$$ {
 		}
 
 		land() {
-			const grant = this.grant()
-			return grant ? this.$.$giper_baza_glob.Land( new $giper_baza_link( grant.land ) ) : null
+			const pointer = this.grant()?.pointer
+			return pointer ? this.$.$bog_id_land( pointer ) : null
 		}
 
 		note( next?: string ) {
@@ -51,9 +51,9 @@ namespace $.$$ {
 
 		status() {
 			const grant = this.grant()
-			if( !grant ) return this.status_out()
+			if( !grant?.pointer ) return this.status_out()
 			return this.status_in()
-				.replace( '{lord}', grant.lord )
+				.replace( '{name}', grant.name || grant.lord )
 				.replace( '{tier}', $giper_baza_rank_tier[ this.tier() ?? 0 ] )
 		}
 

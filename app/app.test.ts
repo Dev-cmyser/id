@@ -2,32 +2,57 @@ namespace $.$$ {
 
 	$mol_test({
 
-		async 'approve gives post to app, revoke denies'( $ ) {
+		async 'revoke of one device rotates land and keeps data for others'( $ ) {
 
 			const app = $bog_id_app.make({ $ })
-			new $mol_wire_atom( 'bog_id_app_test_keep', ()=> app.store() ).fresh()
+			const keep = ( name: string, task: ()=> unknown )=> new $mol_wire_atom( name, task ).fresh()
+			keep( 'bog_id_app_test_profile', ()=> app.profile() )
 
-			const guest = await $.$giper_baza_auth._generate()
-			const pass = guest.pass()
+			const one = ( await $.$giper_baza_auth._generate() ).pass()
+			const two = ( await $.$giper_baza_auth._generate() ).pass()
+			const ask = ( pass: $giper_baza_auth_pass )=> app.request({
+				origin: 'https://example.org',
+				app: 'https://example.org/notes/',
+				pass: pass.toString(),
+				scope: 'notes',
+			})
 
-			app.request({ origin: 'https://example.org', pass: pass.toString(), scope: 'notes' })
-			const sent = await $mol_wire_async( app ).grant_save()
+			await $mol_wire_async( app ).name( 'Кирилл' )
 
-			const land = $.$giper_baza_glob.Land( new $giper_baza_link( sent.land ) )
-			new $mol_wire_atom( 'bog_id_app_test_land', ()=> $.$giper_baza_glob.Land( new $giper_baza_link( sent.land ) ) ).fresh()
+			ask( one )
+			const first = await $mol_wire_async( app ).grant_save()
+			ask( two )
+			const second = await $mol_wire_async( app ).grant_save()
 
-			$mol_assert_equal( sent.origin, 'https://example.org' )
-			$mol_assert_equal( land.lord_rank( pass.lord() ), $giper_baza_rank_post( 'just' ) )
-
-			const again = await $mol_wire_async( app ).grant_save()
-			$mol_assert_equal( again.land, sent.land )
+			$mol_assert_equal( first.name, 'Кирилл' )
+			$mol_assert_equal( second.pointer, first.pointer )
 			$mol_assert_equal( app.grants().length, 1 )
 
-			const id = app.grants()[ 0 ].link().str
-			await $mol_wire_async( app ).revoke( id )
+			const grant = app.grants()[ 0 ]
+			const pointer = app.grant_pointer( grant )
+			const old = app.grant_land( grant )
+			keep( 'bog_id_app_test_pointer', ()=> app.grant_pointer( grant ) )
+			keep( 'bog_id_app_test_old', ()=> $.$giper_baza_glob.Land( old.link() ) )
 
-			$mol_assert_equal( land.lord_rank( pass.lord() ), $giper_baza_rank_deny )
-			$mol_assert_equal( app.grant_active( id ), false )
+			$mol_assert_equal( old.lord_rank( one.lord() ), $giper_baza_rank_post( 'just' ) )
+			$mol_assert_equal( old.lord_rank( two.lord() ), $giper_baza_rank_post( 'just' ) )
+
+			await $mol_wire_async( old.Data( $giper_baza_atom_text ) ).val( 'hello' )
+			await $mol_wire_async( app ).rotate( grant.link().str, [ one.toString() ] )
+
+			const next = app.grant_land( grant )
+			keep( 'bog_id_app_test_next', ()=> $.$giper_baza_glob.Land( next.link() ) )
+
+			$mol_assert_unique( next.link().str, old.link().str )
+			$mol_assert_equal( $.$bog_id_land( first.pointer )!.link().str, next.link().str )
+
+			$mol_assert_equal( next.lord_rank( two.lord() ), $giper_baza_rank_post( 'just' ) )
+			$mol_assert_equal( next.lord_rank( one.lord() ), $giper_baza_rank_deny )
+			$mol_assert_equal( old.lord_rank( one.lord() ), $giper_baza_rank_deny )
+			$mol_assert_equal( pointer.lord_rank( one.lord() ), $giper_baza_rank_deny )
+
+			$mol_assert_equal( next.Data( $giper_baza_atom_text ).val(), 'hello' )
+			$mol_assert_equal( app.grant_apps( grant ), [ two.toString() ] )
 
 		},
 

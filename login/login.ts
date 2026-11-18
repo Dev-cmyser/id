@@ -2,10 +2,11 @@ namespace $ {
 
 	export type $bog_id_login_grant = {
 		lord: string
-		land: string
+		name: string
+		pointer: string
 	}
 
-	/** Opens Giper ID popup, sends app Pass and resolves with granted Land */
+	/** Opens Giper ID popup, sends app Pass and resolves with Pointer to granted Land */
 	export function $bog_id_login( provider: string, pass: string, scope: string ) {
 
 		const win = $mol_dom_context
@@ -38,7 +39,11 @@ namespace $ {
 
 				if( data?.bog_id === 'grant' ) {
 					popup.close()
-					finish( null, { lord: String( data.lord ), land: String( data.land ) } )
+					finish( null, {
+						lord: String( data.lord ),
+						name: String( data.name ?? '' ),
+						pointer: String( data.pointer ),
+					} )
 				}
 
 			}
