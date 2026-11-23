@@ -1,0 +1,18 @@
+$bog_id_row $mol_button_minor
+	current false
+	attr *
+		^
+		bog_id_row_current <= current
+	sub /
+		<= Face $mol_view
+			sub <= face /
+		<= Info $mol_view
+			sub <= info /
+				<= Name $mol_view
+					sub /
+						<= name \
+				<= Note $mol_view
+					sub /
+						<= note \
+		<= Tail $mol_view
+			sub <= tail /

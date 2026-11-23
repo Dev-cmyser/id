@@ -2,6 +2,33 @@ namespace $.$$ {
 
 	$mol_test({
 
+		async 'signed out account stays in list and asks for passkey'( $ ) {
+
+			$.$bog_id_account = class extends $.$bog_id_account {
+				static override list( next = this.memory ) {
+					return this.memory = next
+				}
+				static memory = [] as readonly $bog_id_account_data[]
+			}
+
+			const app = $bog_id_app.make({ $ })
+			const other = { lord: 'other', name: 'Анна', key: '', vault: 'vault' }
+			let entered = 0
+			app.passkey_enter = ()=> { ++ entered }
+
+			$.$bog_id_account.put( other )
+			$mol_assert_equal( app.account_rows().length, 2 )
+			$mol_assert_equal( app.account_name( 'other' ), 'Анна' )
+			$mol_assert_equal( app.account_current( app.lord() ), true )
+
+			app.account_open( 'other' )
+			$mol_assert_equal( entered, 1 )
+
+			app.account_open( app.lord() )
+			$mol_assert_equal( entered, 1 )
+
+		},
+
 		async 'revoke of one device rotates land and keeps data for others'( $ ) {
 
 			const app = $bog_id_app.make({ $ })

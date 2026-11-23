@@ -1,74 +1,130 @@
-$bog_id_app $mol_page
+$bog_id_app $mol_scroll
 	title @ \Гипер ID
 	plugins /
-		<= Theme $mol_theme_auto
-	body /
-		<= Consent $mol_list
-			rows <= consent_rows /
-				<= Consent_text $mol_paragraph
-					title <= consent_text \
-				<= Consent_self $mol_paragraph
-					title @ \Это ваш собственный ключ: войдите из приложения с отдельным ключом
-				<= Consent_tools $mol_row
-					sub /
+		<= Theme $bog_theme_auto
+			theme_light \$mol_theme_calm_light
+			theme_dark \$mol_theme_calm_dark
+	sub /
+		<= Column $mol_view
+			sub <= panels /
+				<= Login $mol_list
+					rows <= login_rows /
+						<= Brand $mol_view
+							sub /
+								<= Brand_icon $mol_icon_fingerprint
+								<= title
+						<= Head $mol_paragraph
+							title <= head \
+						<= Accounts $mol_list
+							rows <= account_rows /
+								<= Account* $bog_id_row
+									current <= account_current* false
+									name <= account_name* \
+									note <= account_note* \
+									click? <=> account_open*? null
+									face /
+										<= Account_face* $mol_avatar
+											id <= account_id* \
+									tail <= account_tail* /
+										<= Account_check* $mol_icon_check
+						<= Add $bog_id_row
+							name @ \Добавить аккаунт
+							click? <=> add_open? null
+							face /
+								<= Add_icon $mol_icon_plus
+						<= Enter $bog_id_row
+							name @ \Войти по биометрии
+							note @ \Отпечаток, лицо или ключ доступа
+							click? <=> passkey_enter? null
+							face /
+								<= Enter_icon $mol_icon_fingerprint
+						<= Make $bog_id_row
+							name @ \Создать новый аккаунт
+							note @ \С отдельным ключом и приложениями
+							click? <=> account_make? null
+							face /
+								<= Make_icon $mol_icon_account_plus
+						<= Back $mol_button_minor
+							title @ \Назад
+							click? <=> add_close? null
+						<= Enter_status $mol_paragraph
+							title <= enter_status \
+						<= Draft $mol_string
+							hint @ \Как вас зовут
+							value? <=> name_draft? \
+						<= Consent_text $mol_paragraph
+							title <= consent_text \
+						<= Consent_self $mol_paragraph
+							title @ \Это ваш собственный ключ: войдите из приложения с отдельным ключом
 						<= Approve $mol_button_major
-							title @ \Разрешить
+							title <= approve_title \
 							enabled <= approve_enabled true
 							click? <=> approve? null
 						<= Reject $mol_button_minor
-							title @ \Отклонить
+							title @ \Отмена
 							click? <=> reject? null
-		<= Name_label $mol_labeler
-			title @ \Имя
-			content /
-				<= Name $mol_string
-					hint @ \Как вас показывать приложениям
-					value? <=> name? \
-		<= Lord_label $mol_labeler
-			title @ \Ваш лорд
-			content /
-				<= Lord $mol_paragraph
-					title <= lord \
-		<= Passkey_label $mol_labeler
-			title @ \Passkey
-			content /
-				<= Passkey_tools $mol_row
-					sub /
-						<= Passkey_bind $mol_button_minor
-							title <= passkey_bind_title @ \Привязать passkey
+				<= Profile $mol_list
+					rows <= profile_rows /
+						<= Profile_head $mol_paragraph
+							title @ \Профиль
+						<= Name $mol_string
+							hint @ \Как вас показывать приложениям
+							value? <=> name? \
+						<= Bind $bog_id_row
+							name <= passkey_bind_title @ \Включить вход по биометрии
+							note <= bind_note \
 							click? <=> passkey_bind? null
-						<= Passkey_enter $mol_button_minor
-							title @ \Войти по passkey
-							click? <=> passkey_enter? null
-				<= Passkey_status $mol_paragraph
-					title <= passkey_status \
-		<= Grants_label $mol_labeler
-			title @ \Подключённые приложения
-			content /
-				<= Grants $mol_list
-					rows <= grant_rows /
-						<= Grant* $mol_list
-							rows <= grant_parts* /
-								<= Grant_head* $mol_row
-									sub /
-										<= Grant_title* $mol_paragraph
-											title <= grant_title* \
-										<= Grant_revoke* $mol_button_minor
-											title @ \Отозвать всё
-											enabled <= grant_active* true
-											click? <=> grant_revoke*? null
-								<= App* $mol_row
-									sub /
-										<= App_title* $mol_paragraph
-											title <= app_title* \
-										<= App_revoke* $mol_button_minor
-											title @ \Отозвать
-											click? <=> app_revoke*? null
-	consent_template @ \{app} просит доступ «{scope}»
+							face /
+								<= Bind_icon $mol_icon_fingerprint
+						<= Bind_status $mol_paragraph
+							title <= bind_status \
+						<= Exit $bog_id_row
+							name @ \Выйти на этом устройстве
+							note @ \Вернуться можно по биометрии
+							click? <=> account_exit? null
+							face /
+								<= Exit_icon $mol_icon_logout
+				<= Grants_panel $mol_list
+					rows /
+						<= Grants_head $mol_paragraph
+							title @ \Подключённые приложения
+						<= Grants $mol_list
+							rows <= grant_rows /
+								<= Grant* $mol_list
+									rows <= grant_parts* /
+										<= Grant_head* $mol_view
+											sub /
+												<= Grant_title* $mol_paragraph
+													title <= grant_title* \
+												<= Grant_revoke* $mol_button_minor
+													title @ \Отозвать всё
+													enabled <= grant_active* true
+													click? <=> grant_revoke*? null
+										<= App* $mol_view
+											sub /
+												<= App_title* $mol_paragraph
+													title <= app_title* \
+												<= App_revoke* $mol_button_minor
+													title @ \Отозвать
+													click? <=> app_revoke*? null
+	head_pick @ \Выберите аккаунт для входа в {app}
+	head_own @ \Ваши аккаунты
+	head_add @ \Добавление аккаунта
+	account_locked @ \Нужен вход по биометрии
+	account_noname @ \Без имени
+	approve_as @ \Войти как {name}
+	approve_plain @ \Войти
+	consent_template @ \Приложение получит доступ к разделу «{scope}» и увидит ваше имя. Ключ аккаунта остаётся у вас
 	grant_template @ \{app} · {scope}
 	device_template @ \Устройство {lord}
-	passkey_rebind_title @ \Перепривязать passkey
-	passkey_done @ \Passkey привязан, ключ зашифрован им в Базе
-	passkey_none @ \Привяжите passkey, чтобы войти с другого устройства
+	passkey_rebind_title @ \Привязать ещё одну биометрию
+	passkey_done @ \Вход по биометрии включён
+	passkey_none @ \Без неё аккаунт живёт только в этом браузере
 	passkey_wait @ \Ждём зашифрованный ключ из Базы…
-	passkey_wrong @ \Этот passkey не открывает ключ
+	passkey_offline @ \Нет связи с Гипер Базой. Вход продолжится сам, когда она появится
+	passkey_unsaved @ \Нет связи с Гипер Базой: пока войти можно только на этом устройстве
+	passkey_wrong @ \Этот ключ доступа не открывает аккаунт
+	passkey_foreign @ \Это ключ доступа другого приложения. Выберите другой
+	passkey_cancel @ \Вход отменён или на устройстве нет подходящего ключа
+	passkey_noprf @ \Браузер или хранилище ключей не поддерживает PRF. Попробуйте связку ключей iCloud, Google или другой браузер
+	passkey_again @ \Ключ создан. Нажмите ещё раз, чтобы подтвердить
