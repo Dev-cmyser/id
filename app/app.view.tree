@@ -72,6 +72,9 @@ $bog_id_app $mol_scroll
 						<= Name $mol_string
 							hint @ \Как вас показывать приложениям
 							value? <=> name? \
+						<= Card_copy $mol_button_copy
+							title @ \Скопировать карточку профиля
+							text <= card_uri \
 						<= Bind $bog_id_row
 							name <= passkey_bind_title @ \Включить вход по биометрии
 							note <= bind_note \

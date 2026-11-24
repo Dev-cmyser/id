@@ -198,10 +198,15 @@ namespace $.$$ {
 			]
 		}
 
+		card_uri() {
+			return `https://b-on-g.github.io/dock/card/#!link=${ this.lord() }`
+		}
+
 		profile_rows() {
 			return [
 				this.Profile_head(),
 				this.Name(),
+				... this.name() ? [ this.Card_copy() ] : [],
 				this.Bind(),
 				... this.bind_status() ? [ this.Bind_status() ] : [],
 				... this.vault() ? [ this.Exit() ] : [],
