@@ -17077,6 +17077,129 @@ var $;
 
 
 ;
+	($.$mol_icon_clipboard) = class $mol_icon_clipboard extends ($.$mol_icon) {
+		path(){
+			return "M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3";
+		}
+	};
+
+
+;
+"use strict";
+
+
+;
+	($.$mol_icon_clipboard_outline) = class $mol_icon_clipboard_outline extends ($.$mol_icon) {
+		path(){
+			return "M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z";
+		}
+	};
+
+
+;
+"use strict";
+
+
+;
+	($.$mol_button_copy) = class $mol_button_copy extends ($.$mol_button_minor) {
+		text(){
+			return (this.title());
+		}
+		text_blob(next){
+			if(next !== undefined) return next;
+			const obj = new this.$.$mol_blob([(this.text())], {"type": "text/plain"});
+			return obj;
+		}
+		html(){
+			return "";
+		}
+		html_blob(next){
+			if(next !== undefined) return next;
+			const obj = new this.$.$mol_blob([(this.html())], {"type": "text/html"});
+			return obj;
+		}
+		Icon(){
+			const obj = new this.$.$mol_icon_clipboard_outline();
+			return obj;
+		}
+		title(){
+			return "";
+		}
+		blobs(){
+			return [(this.text_blob()), (this.html_blob())];
+		}
+		data(){
+			return {};
+		}
+		sub(){
+			return [(this.Icon()), (this.title())];
+		}
+	};
+	($mol_mem(($.$mol_button_copy.prototype), "text_blob"));
+	($mol_mem(($.$mol_button_copy.prototype), "html_blob"));
+	($mol_mem(($.$mol_button_copy.prototype), "Icon"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    const mapping = {
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        '&': '&amp;',
+    };
+    function $mol_html_encode(text) {
+        return text.replace(/[&<">]/gi, str => mapping[str]);
+    }
+    $.$mol_html_encode = $mol_html_encode;
+})($ || ($ = {}));
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        /**
+         * Button copy text() value to clipboard
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_button_demo
+         */
+        class $mol_button_copy extends $.$mol_button_copy {
+            data() {
+                return Object.fromEntries(this.blobs().map(blob => [blob.type, blob]));
+            }
+            html() {
+                return $mol_html_encode(this.text());
+            }
+            attachments() {
+                return [new ClipboardItem(this.data())];
+            }
+            click(event) {
+                const cb = $mol_wire_sync(this.$.$mol_dom_context.navigator.clipboard);
+                cb.writeText?.(this.text());
+                cb.write?.(this.attachments());
+                if (cb.writeText === undefined && cb.write === undefined) {
+                    throw new Error("doesn't support copy to clipoard");
+                }
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_button_copy.prototype, "html", null);
+        __decorate([
+            $mol_mem
+        ], $mol_button_copy.prototype, "attachments", null);
+        $$.$mol_button_copy = $mol_button_copy;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
 	($.$mol_icon_logout) = class $mol_icon_logout extends ($.$mol_icon) {
 		path(){
 			return "M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12M4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z";
@@ -17317,6 +17440,15 @@ var $;
 			(obj.value) = (next) => ((this.name(next)));
 			return obj;
 		}
+		card_uri(){
+			return "";
+		}
+		Card_copy(){
+			const obj = new this.$.$mol_button_copy();
+			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Card_copy_title")));
+			(obj.text) = () => ((this.card_uri()));
+			return obj;
+		}
 		passkey_bind_title(){
 			return (this.$.$mol_locale.text("$bog_id_app_passkey_bind_title"));
 		}
@@ -17367,6 +17499,7 @@ var $;
 			return [
 				(this.Profile_head()), 
 				(this.Name()), 
+				(this.Card_copy()), 
 				(this.Bind()), 
 				(this.Bind_status()), 
 				(this.Exit())
@@ -17572,6 +17705,7 @@ var $;
 	($mol_mem(($.$bog_id_app.prototype), "Profile_head"));
 	($mol_mem(($.$bog_id_app.prototype), "name"));
 	($mol_mem(($.$bog_id_app.prototype), "Name"));
+	($mol_mem(($.$bog_id_app.prototype), "Card_copy"));
 	($mol_mem(($.$bog_id_app.prototype), "passkey_bind"));
 	($mol_mem(($.$bog_id_app.prototype), "Bind_icon"));
 	($mol_mem(($.$bog_id_app.prototype), "Bind"));
@@ -17714,6 +17848,730 @@ var $;
         }
     }
     $.$bog_id_vault = $bog_id_vault;
+})($ || ($ = {}));
+
+;
+	($.$mol_link) = class $mol_link extends ($.$mol_view) {
+		uri_toggle(){
+			return "";
+		}
+		uri_unsafe(){
+			return (this.uri_toggle());
+		}
+		hint(){
+			return "";
+		}
+		hint_safe(){
+			return (this.hint());
+		}
+		target(){
+			return "_self";
+		}
+		file_name(){
+			return "";
+		}
+		current(){
+			return false;
+		}
+		relation(){
+			return "";
+		}
+		event_click(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		click(next){
+			return (this.event_click(next));
+		}
+		uri(){
+			return "";
+		}
+		dom_name(){
+			return "a";
+		}
+		uri_off(){
+			return "";
+		}
+		uri_native(){
+			return null;
+		}
+		external(){
+			return false;
+		}
+		attr(){
+			return {
+				...(super.attr()), 
+				"href": (this.uri_unsafe()), 
+				"title": (this.hint_safe()), 
+				"target": (this.target()), 
+				"download": (this.file_name()), 
+				"mol_link_current": (this.current()), 
+				"rel": (this.relation())
+			};
+		}
+		sub(){
+			return [(this.title())];
+		}
+		arg(){
+			return {};
+		}
+		event(){
+			return {...(super.event()), "click": (next) => (this.click(next))};
+		}
+	};
+	($mol_mem(($.$mol_link.prototype), "event_click"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_dom_safe_uri(uri) {
+        return uri.replace(/^(?=\w+script+:)/, 'about:blank#');
+    }
+    $.$mol_dom_safe_uri = $mol_dom_safe_uri;
+    function $mol_dom_safe_attr(val) {
+        return val;
+    }
+    $.$mol_dom_safe_attr = $mol_dom_safe_attr;
+    $.$mol_dom_safe_rules = {
+        // defaults
+        '': { id: $mol_dom_safe_attr },
+        // special
+        a: { href: $mol_dom_safe_uri },
+        img: {
+            src: $mol_dom_safe_uri,
+            width: $mol_dom_safe_attr,
+            height: $mol_dom_safe_attr,
+        },
+        object: { src: $mol_dom_safe_uri },
+        // blocks
+        div: {},
+        p: {},
+        h1: {},
+        h2: {},
+        h3: {},
+        h4: {},
+        h5: {},
+        h6: {},
+        blockquote: {},
+        pre: {},
+        ul: {},
+        ol: {},
+        li: {},
+        details: {},
+        section: {},
+        summary: {},
+        hr: {},
+        table: {},
+        tr: {},
+        td: {},
+        // inlines
+        span: {},
+        strong: {},
+        em: {},
+        br: {},
+        ins: {},
+        del: {},
+        code: {},
+    };
+    function $mol_dom_safe(nodes) {
+        const res = [];
+        for (const node of nodes) {
+            if (node.nodeType === node.TEXT_NODE) {
+                res.push(node);
+                continue;
+            }
+            if (node.nodeType === node.ELEMENT_NODE) {
+                const kids = this.$mol_dom_safe([...node.childNodes]);
+                const allowed = this.$mol_dom_safe_rules[node.localName];
+                if (!allowed) {
+                    res.push(...kids);
+                    continue;
+                }
+                for (const attr of [...node.attributes]) {
+                    const proc = allowed[attr.localName] ?? this.$mol_dom_safe_rules[''][attr.localName];
+                    if (proc)
+                        attr.nodeValue = proc(attr.nodeValue);
+                    else
+                        node.removeAttribute(attr.nodeName);
+                }
+                $mol_dom_render_children(node, kids);
+                res.push(node);
+                continue;
+            }
+        }
+        return res;
+    }
+    $.$mol_dom_safe = $mol_dom_safe;
+})($ || ($ = {}));
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        /**
+         * Dynamic hyperlink. It can add, change or remove parameters. A link that leads to the current page has [mol_link_current] attribute set to true.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_link_demo
+         */
+        class $mol_link extends $.$mol_link {
+            uri_toggle() {
+                return this.current() ? this.uri_off() : this.uri();
+            }
+            uri() {
+                return new this.$.$mol_state_arg(this.state_key()).link(this.arg());
+            }
+            uri_off() {
+                const arg2 = {};
+                for (let i in this.arg())
+                    arg2[i] = null;
+                return new this.$.$mol_state_arg(this.state_key()).link(arg2);
+            }
+            uri_native() {
+                const base = this.$.$mol_state_arg.href();
+                return new URL(this.uri(), base);
+            }
+            current() {
+                const base = this.$.$mol_state_arg.href_normal();
+                const target = this.uri_native().toString();
+                if (base === target)
+                    return true;
+                const args = this.arg();
+                const keys = Object.keys(args).filter(key => args[key] != null);
+                if (keys.length === 0)
+                    return false;
+                for (const key of keys) {
+                    if (this.$.$mol_state_arg.value(key) != args[key])
+                        return false;
+                }
+                return true;
+            }
+            file_name() {
+                return null;
+            }
+            minimal_height() {
+                return Math.max(super.minimal_height(), 24);
+            }
+            external() {
+                return this.uri_native().origin !== $mol_dom_context.location.origin;
+            }
+            target() {
+                return this.external() ? '_blank' : '_self';
+            }
+            hint_safe() {
+                try {
+                    return this.hint();
+                }
+                catch (error) {
+                    $mol_fail_log(error);
+                    if (error instanceof Error)
+                        return '💥' + error.message;
+                    return '';
+                }
+            }
+            uri_unsafe() {
+                return $mol_dom_safe_uri(super.uri_unsafe());
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "uri_toggle", null);
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "uri", null);
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "uri_off", null);
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "uri_native", null);
+        __decorate([
+            $mol_mem
+        ], $mol_link.prototype, "current", null);
+        $$.$mol_link = $mol_link;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    const { rem } = $mol_style_unit;
+    $mol_style_define($mol_link, {
+        textDecoration: 'none',
+        color: $mol_theme.control,
+        stroke: 'currentColor',
+        cursor: 'pointer',
+        padding: $mol_gap.text,
+        boxSizing: 'border-box',
+        position: 'relative',
+        minWidth: rem(2.5),
+        minHeight: rem(2.5),
+        gap: $mol_gap.space,
+        border: {
+            radius: $mol_gap.round,
+        },
+        ':hover': {
+            background: {
+                color: $mol_theme.hover,
+            },
+        },
+        ':focus': {
+            outline: 'none',
+        },
+        ':focus-visible': {
+            outline: 'none',
+            background: {
+                color: $mol_theme.hover,
+            }
+        },
+        ':active': {
+            color: $mol_theme.focus,
+        },
+        '@': {
+            mol_link_current: {
+                'true': {
+                    color: $mol_theme.current,
+                    textShadow: '0 0',
+                }
+            }
+        },
+    });
+})($ || ($ = {}));
+
+;
+	($.$mol_embed_native) = class $mol_embed_native extends ($.$mol_scroll) {
+		uri(next){
+			if(next !== undefined) return next;
+			return "about:config";
+		}
+		title(){
+			return "";
+		}
+		Fallback(){
+			const obj = new this.$.$mol_link();
+			(obj.uri) = () => ((this.uri()));
+			(obj.sub) = () => ([(this.title())]);
+			return obj;
+		}
+		uri_change(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		dom_name(){
+			return "iframe";
+		}
+		window(){
+			return null;
+		}
+		attr(){
+			return {...(super.attr()), "src": (this.uri())};
+		}
+		sub(){
+			return [(this.Fallback())];
+		}
+		message(){
+			return {"hashchange": (next) => (this.uri_change(next))};
+		}
+	};
+	($mol_mem(($.$mol_embed_native.prototype), "uri"));
+	($mol_mem(($.$mol_embed_native.prototype), "Fallback"));
+	($mol_mem(($.$mol_embed_native.prototype), "uri_change"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_wait_timeout_async(timeout) {
+        const promise = new $mol_promise();
+        const task = new this.$mol_after_timeout(timeout, () => promise.done());
+        return Object.assign(promise, {
+            destructor: () => task.destructor()
+        });
+    }
+    $.$mol_wait_timeout_async = $mol_wait_timeout_async;
+    function $mol_wait_timeout(timeout) {
+        return this.$mol_wire_sync(this).$mol_wait_timeout_async(timeout);
+    }
+    $.$mol_wait_timeout = $mol_wait_timeout;
+})($ || ($ = {}));
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_embed_native extends $.$mol_embed_native {
+            window() {
+                $mol_wire_solid();
+                this.uri_resource();
+                return $mol_wire_sync(this).load(this.dom_node_actual());
+            }
+            load(frame) {
+                return new Promise((done, fail) => {
+                    frame.onload = () => {
+                        try {
+                            if (frame.contentWindow.location.href === 'about:blank') {
+                                return;
+                            }
+                        }
+                        catch { }
+                        done(frame.contentWindow);
+                    };
+                    frame.onerror = (event) => {
+                        fail(typeof event === 'string' ? new Error(event) : event.error || event);
+                    };
+                });
+            }
+            uri_resource() {
+                return this.uri().replace(/#.*/, '');
+            }
+            message_listener() {
+                return new $mol_dom_listener($mol_dom_context, 'message', $mol_wire_async(this).message_receive);
+            }
+            sub_visible() {
+                this.window();
+                return super.sub_visible();
+            }
+            message_receive(event) {
+                if (!event)
+                    return;
+                if (event.source !== this.window())
+                    return;
+                if (!Array.isArray(event.data))
+                    return;
+                this.message()[event.data[0]]?.(event);
+            }
+            uri_change(event) {
+                this.$.$mol_wait_timeout(1000);
+                this.uri(event.data[1]);
+            }
+            auto() {
+                return [
+                    this.message_listener(),
+                    this.window(),
+                ];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_embed_native.prototype, "window", null);
+        __decorate([
+            $mol_mem
+        ], $mol_embed_native.prototype, "uri_resource", null);
+        __decorate([
+            $mol_mem
+        ], $mol_embed_native.prototype, "message_listener", null);
+        $$.$mol_embed_native = $mol_embed_native;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/embed/native/native.view.css", "[mol_embed_native] {\n\tmin-width: 0;\n\tmin-height: 0;\n\tmax-width: 100%;\n\tmax-height: 100vh;\n\tobject-fit: cover;\n\tdisplay: flex;\n\tflex: 1 1 auto;\n\tobject-position: top left;\n\tborder-radius: var(--mol_gap_round);\n\taspect-ratio: 4/3;\n\tborder: none;\n}\n");
+})($ || ($ = {}));
+
+;
+	($.$mol_frame) = class $mol_frame extends ($.$mol_embed_native) {
+		allow(){
+			return "";
+		}
+		html(){
+			return null;
+		}
+		attr(){
+			return {
+				"tabindex": (this.tabindex()), 
+				"allow": (this.allow()), 
+				"src": (this.uri()), 
+				"srcdoc": (this.html())
+			};
+		}
+		fullscreen(){
+			return true;
+		}
+		accelerometer(){
+			return true;
+		}
+		autoplay(){
+			return true;
+		}
+		encription(){
+			return true;
+		}
+		gyroscope(){
+			return true;
+		}
+		pip(){
+			return true;
+		}
+		clipboard_read(){
+			return true;
+		}
+		clipboard_write(){
+			return true;
+		}
+	};
+
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        /**
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_frame_demo
+         */
+        class $mol_frame extends $.$mol_frame {
+            window() {
+                // if( this.html() ) return ( this.dom_node() as HTMLIFrameElement ).contentWindow!
+                return super.window();
+            }
+            allow() {
+                return [
+                    ...this.fullscreen() ? ['fullscreen'] : [],
+                    ...this.accelerometer() ? ['accelerometer'] : [],
+                    ...this.autoplay() ? ['autoplay'] : [],
+                    ...this.encription() ? ['encrypted-media'] : [],
+                    ...this.gyroscope() ? ['gyroscope'] : [],
+                    ...this.pip() ? ['picture-in-picture'] : [],
+                    ...this.clipboard_read() ? [`clipboard-read ${this.uri()}`] : [],
+                    ...this.clipboard_write() ? [`clipboard-write ${this.uri()}`] : [],
+                ].join('; ');
+            }
+        }
+        $$.$mol_frame = $mol_frame;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_define($mol_frame, {
+        border: {
+            style: 'none',
+        },
+        maxHeight: $mol_style_unit.vh(100),
+    });
+})($ || ($ = {}));
+
+;
+	($.$giper_web_frame) = class $giper_web_frame extends ($.$mol_frame) {
+		uri(){
+			return "https://web.giper.dev/#mol_lights={lights}/current={current}/query={query}";
+		}
+		query(){
+			return "";
+		}
+	};
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    function parse(theme) {
+        if (theme === 'true')
+            return true;
+        if (theme === 'false')
+            return false;
+        return null;
+    }
+    // Get once because chrome switches to light on print
+    const base = $.$mol_media.match('(prefers-color-scheme: light)');
+    /**
+     * Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+     */
+    function $mol_lights(next) {
+        const arg = parse(this.$mol_state_arg.value('mol_lights'));
+        if (next === undefined) {
+            return arg ?? this.$mol_state_local.value('$mol_lights') ?? base;
+        }
+        else {
+            if (arg === null) {
+                this.$mol_state_local.value('$mol_lights', next === base ? null : next);
+            }
+            else {
+                this.$mol_state_arg.value('mol_lights', String(next));
+            }
+            return next;
+        }
+    }
+    $.$mol_lights = $mol_lights;
+})($ || ($ = {}));
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $giper_web_frame extends $.$giper_web_frame {
+            uri() {
+                return super.uri()
+                    .replace('{lights}', String(this.$.$mol_lights()))
+                    .replace('{query}', encodeURIComponent(this.query()))
+                    .replace('{current}', encodeURIComponent(this.$.$mol_state_arg.href().replace(/^https?:\/\/|\/?\??#.*$/, '')));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $giper_web_frame.prototype, "uri", null);
+        $$.$giper_web_frame = $giper_web_frame;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("giper/web/frame/frame.view.css", "/* @keyframes giper_web_frame_show {\n\tfrom {\n\t\topacity: 0;\n\t}\n}\n\n[giper_web_frame] {\n\tanimation: 5s -1s ease-in giper_web_frame_show;\n} */\n");
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($giper_web_frame, {
+            flex: {
+                basis: '4rem',
+                shrink: 0,
+                grow: 0,
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$bog_dock_frame) = class $bog_dock_frame extends ($.$giper_web_frame) {
+		host(){
+			return "https://b-on-g.github.io/dock/";
+		}
+		lights(){
+			return true;
+		}
+		clipboard_read(){
+			return false;
+		}
+		clipboard_write(){
+			return false;
+		}
+	};
+
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $bog_dock_frame extends $.$bog_dock_frame {
+            lights() {
+                return this.$.$mol_lights();
+            }
+            uri() {
+                return super.uri()
+                    .replace(/^[^#]*/, this.host())
+                    .replace(/mol_lights=\w+/, `mol_lights=${this.lights()}`);
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $bog_dock_frame.prototype, "uri", null);
+        $$.$bog_dock_frame = $bog_dock_frame;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$bog_dock_side) = class $bog_dock_side extends ($.$mol_view) {
+		lights(){
+			return true;
+		}
+		Frame(){
+			const obj = new this.$.$bog_dock_frame();
+			(obj.lights) = () => ((this.lights()));
+			return obj;
+		}
+		shown(){
+			return false;
+		}
+		attr(){
+			return {...(super.attr()), "bog_dock_side_shown": (this.shown())};
+		}
+		sub(){
+			return [(this.Frame())];
+		}
+	};
+	($mol_mem(($.$bog_dock_side.prototype), "Frame"));
+
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $bog_dock_side extends $.$bog_dock_side {
+            embedded() {
+                const win = this.$.$mol_dom_context;
+                return win.parent !== win.self;
+            }
+            shown() {
+                return !this.embedded() && this.$.$mol_media.match('(min-width: 60rem)');
+            }
+            lights() {
+                const root = this.$.$mol_view.roots()[0];
+                const theme = root?.Theme?.() ?? root?.Theme_auto?.();
+                return theme?.is_light_now?.() ?? this.$.$mol_lights();
+            }
+            sub() {
+                return this.shown() ? super.sub() : [];
+            }
+        }
+        $$.$bog_dock_side = $bog_dock_side;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("bog/dock/side/side.view.css", "[bog_dock_side][mol_view_root] {\n\tdisplay: none;\n\tposition: fixed;\n\tz-index: 1;\n\ttop: 0;\n\tleft: 0;\n\twidth: 4rem;\n\theight: 100%;\n\ttransition: none;\n}\n\n[bog_dock_side][mol_view_root][bog_dock_side_shown=\"true\"] {\n\tdisplay: flex;\n}\n\n[bog_dock_side_frame] {\n\theight: 100%;\n}\n\nbody:has( > [bog_dock_side_shown=\"true\"] ) {\n\tpadding-left: 4rem;\n}\n\n@media print {\n\t[bog_dock_side][mol_view_root][bog_dock_side_shown=\"true\"] { display: none; }\n\tbody:has( > [bog_dock_side_shown=\"true\"] ) { padding-left: 0; }\n}\n");
 })($ || ($ = {}));
 
 ;
@@ -17876,10 +18734,14 @@ var $;
                     ] : [],
                 ];
             }
+            card_uri() {
+                return `https://b-on-g.github.io/dock/card/#!link=${this.lord()}`;
+            }
             profile_rows() {
                 return [
                     this.Profile_head(),
                     this.Name(),
+                    ...this.name() ? [this.Card_copy()] : [],
                     this.Bind(),
                     ...this.bind_status() ? [this.Bind_status()] : [],
                     ...this.vault() ? [this.Exit()] : [],
@@ -20617,24 +21479,6 @@ var $;
             $.$mol_wait_timeout_async = async function $mol_wait_timeout_async_mock(timeout) { };
         });
     })($$ = $_1.$$ || ($_1.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wait_timeout_async(timeout) {
-        const promise = new $mol_promise();
-        const task = new this.$mol_after_timeout(timeout, () => promise.done());
-        return Object.assign(promise, {
-            destructor: () => task.destructor()
-        });
-    }
-    $.$mol_wait_timeout_async = $mol_wait_timeout_async;
-    function $mol_wait_timeout(timeout) {
-        return this.$mol_wire_sync(this).$mol_wait_timeout_async(timeout);
-    }
-    $.$mol_wait_timeout = $mol_wait_timeout;
 })($ || ($ = {}));
 
 ;
@@ -24987,41 +25831,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function parse(theme) {
-        if (theme === 'true')
-            return true;
-        if (theme === 'false')
-            return false;
-        return null;
-    }
-    // Get once because chrome switches to light on print
-    const base = $.$mol_media.match('(prefers-color-scheme: light)');
-    /**
-     * Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
-     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
-     */
-    function $mol_lights(next) {
-        const arg = parse(this.$mol_state_arg.value('mol_lights'));
-        if (next === undefined) {
-            return arg ?? this.$mol_state_local.value('$mol_lights') ?? base;
-        }
-        else {
-            if (arg === null) {
-                this.$mol_state_local.value('$mol_lights', next === base ? null : next);
-            }
-            else {
-                this.$mol_state_arg.value('mol_lights', String(next));
-            }
-            return next;
-        }
-    }
-    $.$mol_lights = $mol_lights;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
     $mol_test({
         'null by default'() {
             const key = String(Math.random());
@@ -25148,6 +25957,76 @@ var $;
             $mol_assert_unique(await $bog_id_vault.open(vault, other), auth.toString() + auth.toStringPrivate());
         },
     });
+})($ || ($ = {}));
+
+;
+"use strict";
+/** @jsx $mol_jsx */
+/** @jsxFrag $mol_jsx_frag */
+var $;
+(function ($) {
+    $mol_test({
+        'safe tag'() {
+            $mol_assert_equal($mol_dom_serialize($$.$mol_dom_safe([$mol_jsx("div", null, "foo")])[0]), $mol_dom_serialize($mol_jsx("div", null, "foo")));
+        },
+        'bad tag'() {
+            $mol_assert_equal($mol_dom_serialize($$.$mol_dom_safe([$mol_jsx("script", null, "alert('ahtung!')")])[0]), $mol_dom_serialize($mol_jsx($mol_jsx_frag, null, "alert('ahtung!')")));
+        },
+        'common attr'() {
+            $mol_assert_equal($mol_dom_serialize($$.$mol_dom_safe([$mol_jsx("a", { id: "foo" }, "foo")])[0]), $mol_dom_serialize($mol_jsx("a", { id: "foo" }, "foo")));
+        },
+        'safe attr'() {
+            $mol_assert_equal($mol_dom_serialize($$.$mol_dom_safe([$mol_jsx("a", { href: "https://example.org/" }, "foo")])[0]), $mol_dom_serialize($mol_jsx("a", { href: "https://example.org/" }, "foo")));
+        },
+        'bad attr'() {
+            $mol_assert_equal($mol_dom_serialize($$.$mol_dom_safe([$mol_jsx("a", { onclick: "alert('ahtung!')" }, "foo")])[0]), $mol_dom_serialize($mol_jsx("a", null, "foo")));
+        },
+        'danger attr'() {
+            $mol_assert_equal($mol_dom_serialize($$.$mol_dom_safe([$mol_jsx("a", { href: "javascript:alert('ahtung!')" }, "foo")])[0]), $mol_dom_serialize($mol_jsx("a", { href: "about:blank#javascript:alert('ahtung!')" }, "foo")));
+        },
+    });
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($_1) {
+    $mol_test({
+        'frame opens own dock with lights, current app and query'($) {
+            const frame = $bog_dock_frame.make({
+                $,
+                query: () => 'a/b c',
+            });
+            const [host, hash] = frame.uri().split('#');
+            $mol_assert_equal(host, 'https://b-on-g.github.io/dock/');
+            $mol_assert_equal(hash.includes('query=a%2Fb%20c'), true);
+            $mol_assert_equal(hash.includes('{'), false);
+        },
+    });
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($_1) {
+    var $$;
+    (function ($$) {
+        $mol_test({
+            'dock is shown only on wide screen and never inside of frame'($) {
+                const make = (wide, embedded) => $bog_dock_side.make({
+                    $: $.$mol_ambient({
+                        $mol_media: class extends $mol_media {
+                            static match() { return wide; }
+                        },
+                    }),
+                    embedded: () => embedded,
+                });
+                $mol_assert_equal(make(true, false).sub().length, 1);
+                $mol_assert_equal(make(false, false).sub().length, 0);
+                $mol_assert_equal(make(true, true).sub().length, 0);
+            },
+        });
+    })($$ = $_1.$$ || ($_1.$$ = {}));
 })($ || ($ = {}));
 
 ;

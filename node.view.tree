@@ -185,6 +185,23 @@ $mol_string $mol_view
 $mol_button_major $mol_button_minor
 	theme \$mol_theme_base
 
+$mol_icon_clipboard $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3
+
+$mol_icon_clipboard_outline $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z
+
+$mol_button_copy $mol_button_minor
+	blobs /$mol_blob
+		<= text_blob? $mol_blob /
+			/BlobPart <= text <= title
+			* type \text/plain
+		<= html_blob? $mol_blob /
+			/BlobPart <= html \
+			* type \text/html
+	data *
+	sub /
+		<= Icon $mol_icon_clipboard_outline
+		<= title \
+
 $mol_icon_logout $mol_icon path \M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12M4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z
 
 $bog_id_app $mol_scroll
@@ -261,6 +278,9 @@ $bog_id_app $mol_scroll
 						<= Name $mol_string
 							hint @ \Как вас показывать приложениям
 							value? <=> name? \
+						<= Card_copy $mol_button_copy
+							title @ \Скопировать карточку профиля
+							text <= card_uri \
 						<= Bind $bog_id_row
 							name <= passkey_bind_title @ \Включить вход по биометрии
 							note <= bind_note \
@@ -319,3 +339,73 @@ $bog_id_app $mol_scroll
 	passkey_cancel @ \Вход отменён или на устройстве нет подходящего ключа
 	passkey_noprf @ \Хранилище ключа не отдало секрет PRF. Создайте ключ заново и выберите в окне браузера другое место: Связку ключей iCloud или Google Менеджер паролей. Профиль Chrome и Bitwarden PRF не дают
 	passkey_again @ \Ключ создан. Нажмите ещё раз, чтобы подтвердить
+
+$mol_link $mol_view
+	uri \
+	dom_name \a
+	uri_off \
+	uri_native null
+	external false
+	attr *
+		^
+		href <= uri_unsafe <= uri_toggle \
+		title <= hint_safe <= hint \
+		target <= target \_self
+		download <= file_name \
+		mol_link_current <= current false
+		rel <= relation \
+	sub /$mol_view_content
+		<= title
+	arg *
+	event *
+		^
+		click? <=> click? <=> event_click? null
+
+$mol_embed_native $mol_scroll
+	dom_name \iframe
+	window null
+	attr *
+		^
+		src <= uri? \about:config
+	sub /
+		<= Fallback $mol_link
+			uri <= uri
+			sub /
+				<= title \
+	message *
+		hashchange? <=> uri_change? null
+
+$mol_frame $mol_embed_native
+	attr *
+		tabindex <= tabindex
+		allow <= allow \
+		src <= uri
+		srcdoc <= html null
+	fullscreen true
+	accelerometer true
+	autoplay true
+	encription true
+	gyroscope true
+	pip true
+	clipboard_read true
+	clipboard_write true
+
+$giper_web_frame $mol_frame
+	uri \https://web.giper.dev/#mol_lights={lights}/current={current}/query={query}
+	- uri \http://localhost:9080/giper/web/bar/-/test.html#mol_lights={lights}/current={current}/query={query}
+	query \
+
+$bog_dock_frame $giper_web_frame
+	host \https://b-on-g.github.io/dock/
+	lights true
+	clipboard_read false
+	clipboard_write false
+
+$bog_dock_side $mol_view
+	shown false
+	attr *
+		^
+		bog_dock_side_shown <= shown
+	sub /
+		<= Frame $bog_dock_frame
+			lights <= lights true

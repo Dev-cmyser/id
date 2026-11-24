@@ -2264,6 +2264,9 @@ $bog_id_app $mol_scroll
 						<= Name $mol_string
 							hint @ \Как вас показывать приложениям
 							value? <=> name? \
+						<= Card_copy $mol_button_copy
+							title @ \Скопировать карточку профиля
+							text <= card_uri \
 						<= Bind $bog_id_row
 							name <= passkey_bind_title @ \Включить вход по биометрии
 							note <= bind_note \
@@ -2322,3 +2325,23 @@ $bog_id_app $mol_scroll
 	passkey_cancel @ \Вход отменён или на устройстве нет подходящего ключа
 	passkey_noprf @ \Хранилище ключа не отдало секрет PRF. Создайте ключ заново и выберите в окне браузера другое место: Связку ключей iCloud или Google Менеджер паролей. Профиль Chrome и Bitwarden PRF не дают
 	passkey_again @ \Ключ создан. Нажмите ещё раз, чтобы подтвердить
+
+$giper_web_frame $mol_frame
+	uri \https://web.giper.dev/#mol_lights={lights}/current={current}/query={query}
+	- uri \http://localhost:9080/giper/web/bar/-/test.html#mol_lights={lights}/current={current}/query={query}
+	query \
+
+$bog_dock_frame $giper_web_frame
+	host \https://b-on-g.github.io/dock/
+	lights true
+	clipboard_read false
+	clipboard_write false
+
+$bog_dock_side $mol_view
+	shown false
+	attr *
+		^
+		bog_dock_side_shown <= shown
+	sub /
+		<= Frame $bog_dock_frame
+			lights <= lights true
