@@ -17,8 +17,21 @@ namespace $.$$ {
 		auto() {
 			this.profile()
 			this.grants()
+			this.holding()
 			this.listening()
 			this.restoring()
+		}
+
+		@ $mol_mem
+		holding() {
+			return this.hold_lands().map( land => land.sync() )
+		}
+
+		hold_lands() {
+			const home = this.glob().Land( new $giper_baza_link( this.lord() ) )
+			const stores = this.stores().map( store => store.land() )
+			const grants = this.grants().flatMap( grant => [ this.grant_pointer( grant ), ... this.grant_lands( grant ) ] )
+			return [ home, ... stores, ... grants ]
 		}
 
 		glob() {
@@ -178,6 +191,7 @@ namespace $.$$ {
 					... this.name() ? [] : [ this.Draft() ],
 					this.Consent_text(),
 					... this.request_self() ? [ this.Consent_self() ] : [],
+					... this.request_self() || this.synced() ? [] : [ this.Consent_wait() ],
 					this.Approve(),
 					this.Reject(),
 				] : [],
@@ -334,8 +348,20 @@ namespace $.$$ {
 			if( draft ) this.name( draft )
 		}
 
+		@ $mol_mem
+		synced() {
+			try {
+				return this.hold_lands()
+					.map( land => this.$.$bog_id_land_synced( land.link().str ) )
+					.every( Boolean )
+			} catch( error ) {
+				if( !$mol_promise_like( error ) ) $mol_fail_log( error )
+				return false
+			}
+		}
+
 		approve_enabled() {
-			return Boolean( this.request_pass() ) && !this.request_self()
+			return Boolean( this.request_pass() ) && !this.request_self() && this.synced()
 		}
 
 		approve() {
@@ -357,10 +383,23 @@ namespace $.$$ {
 
 			const sent = this.grant_save()
 			const { origin, ... data } = sent
+			$mol_wire_sync( this ).grant_upload( data.pointer )
 
 			this.$.$mol_dom_context.opener?.postMessage( { bog_id: 'grant', ... data }, origin )
 			this.request( null )
 
+		}
+
+		async grant_upload( pointer: string ) {
+			const lands = await $mol_wire_async( this ).upload_lands( pointer )
+			await this.$.$bog_id_land_push( lands )
+		}
+
+		upload_lands( pointer: string ) {
+			const home = this.glob().Land( new $giper_baza_link( this.lord() ) )
+			const stores = this.stores().map( store => store.land() )
+			const land = this.$.$bog_id_land( pointer )
+			return [ home, ... stores, this.glob().Land( new $giper_baza_link( pointer ) ), ... land ? [ land ] : [] ]
 		}
 
 		grant_save() {

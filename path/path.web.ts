@@ -4,6 +4,7 @@ namespace $ {
 
 		static storage_key() {
 			const dir = $mol_dom_context.location.pathname.replace( /[^/]*$/, '' )
+			if( dir === '/' ) return '$giper_baza_auth'
 			return `$giper_baza_auth:${ dir }`
 		}
 
@@ -16,7 +17,10 @@ namespace $ {
 
 			if( next === undefined ) {
 				const str = String( $mol_state_local.value( key ) ?? '' )
-				if( str ) return this.from( str )
+				if( str ) {
+					const auth = this.from( str )
+					if( auth.byteLength === 128 ) return auth
+				}
 			}
 
 			if( !next ) next = this.grab()
