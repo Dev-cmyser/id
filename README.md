@@ -31,7 +31,7 @@ Passkey с расширением PRF хранит лорд в `user.id`. Его
 `$bog_id_login` зависит только от DOM. Для своего Pass и чтения ленда нужна Гипер База из npm.
 
 ```js
-const { lord, name, pointer } = await $bog_id_login( 'https://b-on-g.github.io/id/', pass, 'notes' )
+const { lord, name, pointer } = await $bog_id_login( 'https://dev-cmyser.github.io/id/', pass, 'notes' )
 const land = $bog_id_land( pointer )
 ```
 

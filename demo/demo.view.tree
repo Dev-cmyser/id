@@ -7,7 +7,7 @@ $bog_id_demo $mol_page
 			title @ \Провайдер
 			content /
 				<= Provider $mol_string
-					value? <=> provider? \https://b-on-g.github.io/id/
+					value? <=> provider? \https://dev-cmyser.github.io/id/
 		<= Login $mol_button_major
 			title @ \Войти через Гипер ID
 			click? <=> login? null
