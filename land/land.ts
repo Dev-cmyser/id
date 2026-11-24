@@ -37,7 +37,7 @@ namespace $ {
 				done( faces )
 			}
 
-			const timer = setTimeout( ()=> finish( null ), 3000 )
+			const timer = setTimeout( ()=> finish( null ), 6000 )
 			socket.onopen = ()=> socket.send( land.face_pack().asArray() )
 			socket.onerror = ()=> finish( null )
 
@@ -60,11 +60,12 @@ namespace $ {
 
 			await Promise.all( lands.map( land => $mol_wire_async( land ).units_saving() ) )
 
-			const master = yard.master_current()
+			const master = await $mol_wire_async( yard ).master_current()
 			const faces = await Promise.all( lands.map( land => this.$bog_id_land_ask( master, land ) ) )
 			if( lands.every( ( land, at )=> faces[ at ] && $bog_id_land_covers( faces[ at ], land.faces ) ) ) return true
 
-			if( i ) yard.reconnects( null )
+			if( !faces.every( Boolean ) ) await $mol_wire_async( yard ).master_next()
+			else if( i ) yard.reconnects( null )
 			await new Promise( done => setTimeout( done, 800 ) )
 
 		}
