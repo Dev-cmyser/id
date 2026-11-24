@@ -28,7 +28,20 @@ namespace $.$$ {
 	const line = {
 		justifyContent: 'space-between',
 		alignItems: 'center',
+		gap: '.5rem',
+		minWidth: 0,
 		padding: { left: '.75rem' },
+	} as const
+
+	const text = {
+		flex: { grow: 1, shrink: 1, basis: 0 },
+		minWidth: 0,
+		overflowWrap: 'anywhere',
+	} as const
+
+	const action = {
+		flex: { shrink: 0 },
+		whiteSpace: 'nowrap',
 	} as const
 
 	const field = {
@@ -93,8 +106,10 @@ namespace $.$$ {
 
 		Grant_head: line,
 		App: line,
-		Grant_title: { wordBreak: 'break-word' },
-		App_title: { color: $mol_theme.shade, font: { size: '.8125rem' } },
+		Grant_title: text,
+		Grant_revoke: action,
+		App_revoke: action,
+		App_title: { ... text, color: $mol_theme.shade, font: { size: '.8125rem' } },
 
 	} )
 

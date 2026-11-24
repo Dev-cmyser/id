@@ -621,13 +621,20 @@ namespace $.$$ {
 
 				try {
 					return ( await Secret.get( this.passkey_salt(), id ) ).key
-				} catch {
-					return $mol_fail( new Error( this.passkey_again() ) )
+				} catch( error: any ) {
+					if( error.name === 'NotAllowedError' ) return $mol_fail( new Error( this.passkey_again() ) )
+					this.passkey_id = null
+					return $mol_fail( error )
 				}
 
 			}
 
-			return ( await Secret.get( this.passkey_salt(), this.passkey_id ) ).key
+			try {
+				return ( await Secret.get( this.passkey_salt(), this.passkey_id ) ).key
+			} catch( error: any ) {
+				if( error.name !== 'NotAllowedError' ) this.passkey_id = null
+				return $mol_fail( error )
+			}
 		}
 
 		@ $mol_action
