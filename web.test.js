@@ -7697,6 +7697,55 @@ var $;
                 app.account_open(app.lord());
                 $mol_assert_equal(entered, 1);
             },
+            async 'request with own key offers separate ID instead of approve'($) {
+                const app = $bog_id_app.make({ $ });
+                const other = (await $.$giper_baza_auth._generate()).pass();
+                const ask = (pass) => app.request({
+                    origin: 'https://example.org',
+                    app: 'https://example.org/',
+                    pass: pass.toString(),
+                    scope: 'account',
+                });
+                ask($.$giper_baza_auth.current().pass());
+                $mol_assert_equal(app.request_rows(), [app.Consent_self(), app.Self_make(), app.Reject()]);
+                $mol_assert_equal(app.pick_rows().includes(app.Drop()), false);
+                let made = 0;
+                app.account_make = () => { ++made; };
+                app.Self_make().click(null);
+                $mol_assert_equal(made, 1);
+                ask(other);
+                $mol_assert_equal(app.request_rows().includes(app.Approve()), true);
+                $mol_assert_equal(app.request_rows().includes(app.Self_make()), false);
+            },
+            async 'account is dropped by second click, current one gives way to another'($) {
+                $.$bog_id_account = class extends $.$bog_id_account {
+                    static list(next = this.memory) {
+                        return this.memory = next;
+                    }
+                    static memory = [];
+                };
+                const app = $bog_id_app.make({ $ });
+                const own = app.lord();
+                const left = [];
+                app.account_leave = (lord, key) => { left.push([lord, key]); };
+                app.home_saving = () => { };
+                $.$bog_id_account.put({ lord: 'locked', name: 'Анна', key: '', vault: 'vault' });
+                $.$bog_id_account.put({ lord: 'spare', name: 'Иван', key: 'spare_key', vault: '' });
+                app.drop_toggle();
+                app.account_open('locked');
+                $mol_assert_equal(app.account_note('locked'), app.drop_sure());
+                $mol_assert_equal($.$bog_id_account.list().length, 2);
+                app.account_open(own);
+                $mol_assert_equal(app.account_note(own), app.drop_lost());
+                $mol_assert_equal(app.account_note('locked'), app.account_locked());
+                app.drop_toggle();
+                $mol_assert_equal(app.drop_armed(), '');
+                await $mol_wire_async(app).account_drop('locked');
+                $mol_assert_equal($.$bog_id_account.list().map(data => data.lord), ['spare']);
+                $mol_assert_equal(left, []);
+                await $mol_wire_async(app).account_drop(own);
+                $mol_assert_equal(left, [[own, 'spare_key']]);
+            },
             async 'revoke of one device rotates land and keeps data for others'($) {
                 const app = $bog_id_app.make({ $ });
                 const keep = (name, task) => new $mol_wire_atom(name, task).fresh();

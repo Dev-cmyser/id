@@ -313,6 +313,7 @@
     "$mol_support",
     "$mol_icon_plus",
     "$mol_locale",
+    "$mol_icon_delete",
     "$mol_icon_account_plus",
     "$mol_icon_account",
     "$mol_icon_qrcode_scan",

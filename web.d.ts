@@ -46697,6 +46697,7 @@ declare namespace $ {
         static find(lord: string): $bog_id_account_data | null;
         static merge(data: $bog_id_account_data): $bog_id_account_data[];
         static put(data: $bog_id_account_data): void;
+        static drop(lord: string): void;
     }
 }
 
@@ -46959,202 +46960,202 @@ declare namespace $ {
 		ReturnType< $bog_id_row['face'] >
 	>
 	type $bog_id_row__name_bog_id_app_16 = $mol_type_enforce<
+		ReturnType< $bog_id_app['drop_name'] >
+		,
+		ReturnType< $bog_id_row['name'] >
+	>
+	type $bog_id_row__click_bog_id_app_17 = $mol_type_enforce<
+		ReturnType< $bog_id_app['drop_toggle'] >
+		,
+		ReturnType< $bog_id_row['click'] >
+	>
+	type $bog_id_row__face_bog_id_app_18 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $bog_id_row['face'] >
+	>
+	type $bog_id_row__name_bog_id_app_19 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['name'] >
 	>
-	type $bog_id_row__note_bog_id_app_17 = $mol_type_enforce<
+	type $bog_id_row__note_bog_id_app_20 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['note'] >
 	>
-	type $bog_id_row__click_bog_id_app_18 = $mol_type_enforce<
+	type $bog_id_row__click_bog_id_app_21 = $mol_type_enforce<
 		ReturnType< $bog_id_app['passkey_enter'] >
 		,
 		ReturnType< $bog_id_row['click'] >
 	>
-	type $bog_id_row__face_bog_id_app_19 = $mol_type_enforce<
+	type $bog_id_row__face_bog_id_app_22 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $bog_id_row['face'] >
 	>
-	type $bog_id_row__name_bog_id_app_20 = $mol_type_enforce<
+	type $bog_id_row__name_bog_id_app_23 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['name'] >
 	>
-	type $bog_id_row__note_bog_id_app_21 = $mol_type_enforce<
+	type $bog_id_row__note_bog_id_app_24 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['note'] >
 	>
-	type $bog_id_row__click_bog_id_app_22 = $mol_type_enforce<
+	type $bog_id_row__click_bog_id_app_25 = $mol_type_enforce<
 		ReturnType< $bog_id_app['account_make'] >
 		,
 		ReturnType< $bog_id_row['click'] >
 	>
-	type $bog_id_row__face_bog_id_app_23 = $mol_type_enforce<
+	type $bog_id_row__face_bog_id_app_26 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $bog_id_row['face'] >
 	>
-	type $bog_id_row__name_bog_id_app_24 = $mol_type_enforce<
+	type $bog_id_row__name_bog_id_app_27 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['name'] >
 	>
-	type $bog_id_row__note_bog_id_app_25 = $mol_type_enforce<
+	type $bog_id_row__note_bog_id_app_28 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['note'] >
 	>
-	type $bog_id_row__click_bog_id_app_26 = $mol_type_enforce<
+	type $bog_id_row__click_bog_id_app_29 = $mol_type_enforce<
 		ReturnType< $bog_id_app['move_toggle'] >
 		,
 		ReturnType< $bog_id_row['click'] >
 	>
-	type $bog_id_row__face_bog_id_app_27 = $mol_type_enforce<
+	type $bog_id_row__face_bog_id_app_30 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $bog_id_row['face'] >
 	>
-	type $bog_id_move__apply_bog_id_app_28 = $mol_type_enforce<
+	type $bog_id_move__apply_bog_id_app_31 = $mol_type_enforce<
 		ReturnType< $bog_id_app['move_apply'] >
 		,
 		ReturnType< $bog_id_move['apply'] >
 	>
-	type $mol_button_minor__title_bog_id_app_29 = $mol_type_enforce<
+	type $mol_button_minor__title_bog_id_app_32 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__click_bog_id_app_30 = $mol_type_enforce<
+	type $mol_button_minor__click_bog_id_app_33 = $mol_type_enforce<
 		ReturnType< $bog_id_app['add_close'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_paragraph__title_bog_id_app_31 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_34 = $mol_type_enforce<
 		ReturnType< $bog_id_app['enter_status'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_string__hint_bog_id_app_32 = $mol_type_enforce<
+	type $mol_string__hint_bog_id_app_35 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_string['hint'] >
 	>
-	type $mol_string__value_bog_id_app_33 = $mol_type_enforce<
+	type $mol_string__value_bog_id_app_36 = $mol_type_enforce<
 		ReturnType< $bog_id_app['name_draft'] >
 		,
 		ReturnType< $mol_string['value'] >
 	>
-	type $mol_paragraph__title_bog_id_app_34 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_37 = $mol_type_enforce<
 		ReturnType< $bog_id_app['consent_text'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_paragraph__title_bog_id_app_35 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_38 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_paragraph__title_bog_id_app_36 = $mol_type_enforce<
+	type $mol_button_major__title_bog_id_app_39 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_button_major['title'] >
+	>
+	type $mol_button_major__click_bog_id_app_40 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_make'] >
+		,
+		ReturnType< $mol_button_major['click'] >
+	>
+	type $mol_paragraph__title_bog_id_app_41 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_button_major__title_bog_id_app_37 = $mol_type_enforce<
+	type $mol_button_major__title_bog_id_app_42 = $mol_type_enforce<
 		ReturnType< $bog_id_app['approve_title'] >
 		,
 		ReturnType< $mol_button_major['title'] >
 	>
-	type $mol_button_major__enabled_bog_id_app_38 = $mol_type_enforce<
+	type $mol_button_major__enabled_bog_id_app_43 = $mol_type_enforce<
 		ReturnType< $bog_id_app['approve_enabled'] >
 		,
 		ReturnType< $mol_button_major['enabled'] >
 	>
-	type $mol_button_major__click_bog_id_app_39 = $mol_type_enforce<
+	type $mol_button_major__click_bog_id_app_44 = $mol_type_enforce<
 		ReturnType< $bog_id_app['approve'] >
 		,
 		ReturnType< $mol_button_major['click'] >
 	>
-	type $mol_button_minor__title_bog_id_app_40 = $mol_type_enforce<
+	type $mol_button_minor__title_bog_id_app_45 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__click_bog_id_app_41 = $mol_type_enforce<
+	type $mol_button_minor__click_bog_id_app_46 = $mol_type_enforce<
 		ReturnType< $bog_id_app['reject'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_list__rows_bog_id_app_42 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_47 = $mol_type_enforce<
 		ReturnType< $bog_id_app['login_rows'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_paragraph__title_bog_id_app_43 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_48 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_string__hint_bog_id_app_44 = $mol_type_enforce<
+	type $mol_string__hint_bog_id_app_49 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_string['hint'] >
 	>
-	type $mol_string__value_bog_id_app_45 = $mol_type_enforce<
+	type $mol_string__value_bog_id_app_50 = $mol_type_enforce<
 		ReturnType< $bog_id_app['name'] >
 		,
 		ReturnType< $mol_string['value'] >
 	>
-	type $mol_button_copy__title_bog_id_app_46 = $mol_type_enforce<
+	type $mol_button_copy__title_bog_id_app_51 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_copy['title'] >
 	>
-	type $mol_button_copy__text_bog_id_app_47 = $mol_type_enforce<
+	type $mol_button_copy__text_bog_id_app_52 = $mol_type_enforce<
 		ReturnType< $bog_id_app['card_uri'] >
 		,
 		ReturnType< $mol_button_copy['text'] >
 	>
-	type $bog_id_row__name_bog_id_app_48 = $mol_type_enforce<
+	type $bog_id_row__name_bog_id_app_53 = $mol_type_enforce<
 		ReturnType< $bog_id_app['passkey_bind_title'] >
 		,
 		ReturnType< $bog_id_row['name'] >
 	>
-	type $bog_id_row__note_bog_id_app_49 = $mol_type_enforce<
+	type $bog_id_row__note_bog_id_app_54 = $mol_type_enforce<
 		ReturnType< $bog_id_app['bind_note'] >
 		,
 		ReturnType< $bog_id_row['note'] >
 	>
-	type $bog_id_row__click_bog_id_app_50 = $mol_type_enforce<
-		ReturnType< $bog_id_app['passkey_bind'] >
-		,
-		ReturnType< $bog_id_row['click'] >
-	>
-	type $bog_id_row__face_bog_id_app_51 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $bog_id_row['face'] >
-	>
-	type $mol_paragraph__title_bog_id_app_52 = $mol_type_enforce<
-		ReturnType< $bog_id_app['bind_status'] >
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $bog_id_row__name_bog_id_app_53 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $bog_id_row['name'] >
-	>
-	type $bog_id_row__note_bog_id_app_54 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $bog_id_row['note'] >
-	>
 	type $bog_id_row__click_bog_id_app_55 = $mol_type_enforce<
-		ReturnType< $bog_id_app['share_toggle'] >
+		ReturnType< $bog_id_app['passkey_bind'] >
 		,
 		ReturnType< $bog_id_row['click'] >
 	>
@@ -47164,97 +47165,97 @@ declare namespace $ {
 		ReturnType< $bog_id_row['face'] >
 	>
 	type $mol_paragraph__title_bog_id_app_57 = $mol_type_enforce<
-		string
+		ReturnType< $bog_id_app['bind_status'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $bog_qr__uri_bog_id_app_58 = $mol_type_enforce<
-		ReturnType< $bog_id_app['key'] >
-		,
-		ReturnType< $bog_qr['uri'] >
-	>
-	type $bog_qr__error_correction_bog_id_app_59 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $bog_qr['error_correction'] >
-	>
-	type $mol_view__sub_bog_id_app_60 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_button_copy__title_bog_id_app_61 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_copy['title'] >
-	>
-	type $mol_button_copy__text_bog_id_app_62 = $mol_type_enforce<
-		ReturnType< $bog_id_app['key'] >
-		,
-		ReturnType< $mol_button_copy['text'] >
-	>
-	type $mol_list__rows_bog_id_app_63 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	type $bog_id_row__name_bog_id_app_64 = $mol_type_enforce<
+	type $bog_id_row__name_bog_id_app_58 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['name'] >
 	>
-	type $bog_id_row__note_bog_id_app_65 = $mol_type_enforce<
+	type $bog_id_row__note_bog_id_app_59 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['note'] >
 	>
-	type $bog_id_row__click_bog_id_app_66 = $mol_type_enforce<
-		ReturnType< $bog_id_app['account_exit'] >
+	type $bog_id_row__click_bog_id_app_60 = $mol_type_enforce<
+		ReturnType< $bog_id_app['share_toggle'] >
 		,
 		ReturnType< $bog_id_row['click'] >
 	>
-	type $bog_id_row__face_bog_id_app_67 = $mol_type_enforce<
+	type $bog_id_row__face_bog_id_app_61 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $bog_id_row['face'] >
 	>
-	type $mol_list__rows_bog_id_app_68 = $mol_type_enforce<
-		ReturnType< $bog_id_app['profile_rows'] >
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	type $mol_paragraph__title_bog_id_app_69 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_62 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_paragraph__title_bog_id_app_70 = $mol_type_enforce<
-		ReturnType< $bog_id_app['grant_title'] >
+	type $bog_qr__uri_bog_id_app_63 = $mol_type_enforce<
+		ReturnType< $bog_id_app['key'] >
 		,
-		ReturnType< $mol_paragraph['title'] >
+		ReturnType< $bog_qr['uri'] >
 	>
-	type $mol_button_minor__title_bog_id_app_71 = $mol_type_enforce<
+	type $bog_qr__error_correction_bog_id_app_64 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_button_minor['title'] >
+		ReturnType< $bog_qr['error_correction'] >
 	>
-	type $mol_button_minor__enabled_bog_id_app_72 = $mol_type_enforce<
-		ReturnType< $bog_id_app['grant_active'] >
-		,
-		ReturnType< $mol_button_minor['enabled'] >
-	>
-	type $mol_button_minor__click_bog_id_app_73 = $mol_type_enforce<
-		ReturnType< $bog_id_app['grant_revoke'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
-	>
-	type $mol_view__sub_bog_id_app_74 = $mol_type_enforce<
+	type $mol_view__sub_bog_id_app_65 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
+	type $mol_button_copy__title_bog_id_app_66 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_button_copy['title'] >
+	>
+	type $mol_button_copy__text_bog_id_app_67 = $mol_type_enforce<
+		ReturnType< $bog_id_app['key'] >
+		,
+		ReturnType< $mol_button_copy['text'] >
+	>
+	type $mol_list__rows_bog_id_app_68 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	type $bog_id_row__name_bog_id_app_69 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $bog_id_row['name'] >
+	>
+	type $bog_id_row__note_bog_id_app_70 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $bog_id_row['note'] >
+	>
+	type $bog_id_row__click_bog_id_app_71 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_exit'] >
+		,
+		ReturnType< $bog_id_row['click'] >
+	>
+	type $bog_id_row__face_bog_id_app_72 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $bog_id_row['face'] >
+	>
+	type $mol_list__rows_bog_id_app_73 = $mol_type_enforce<
+		ReturnType< $bog_id_app['profile_rows'] >
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	type $mol_paragraph__title_bog_id_app_74 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
 	type $mol_paragraph__title_bog_id_app_75 = $mol_type_enforce<
-		ReturnType< $bog_id_app['app_title'] >
+		ReturnType< $bog_id_app['grant_title'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
@@ -47263,32 +47264,57 @@ declare namespace $ {
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__click_bog_id_app_77 = $mol_type_enforce<
-		ReturnType< $bog_id_app['app_revoke'] >
+	type $mol_button_minor__enabled_bog_id_app_77 = $mol_type_enforce<
+		ReturnType< $bog_id_app['grant_active'] >
+		,
+		ReturnType< $mol_button_minor['enabled'] >
+	>
+	type $mol_button_minor__click_bog_id_app_78 = $mol_type_enforce<
+		ReturnType< $bog_id_app['grant_revoke'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_view__sub_bog_id_app_78 = $mol_type_enforce<
+	type $mol_view__sub_bog_id_app_79 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_list__rows_bog_id_app_79 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_80 = $mol_type_enforce<
+		ReturnType< $bog_id_app['app_title'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_button_minor__title_bog_id_app_81 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_button_minor['title'] >
+	>
+	type $mol_button_minor__click_bog_id_app_82 = $mol_type_enforce<
+		ReturnType< $bog_id_app['app_revoke'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_view__sub_bog_id_app_83 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_list__rows_bog_id_app_84 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_parts'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_list__rows_bog_id_app_80 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_85 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_rows'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_list__rows_bog_id_app_81 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_86 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_view__sub_bog_id_app_82 = $mol_type_enforce<
+	type $mol_view__sub_bog_id_app_87 = $mol_type_enforce<
 		ReturnType< $bog_id_app['panels'] >
 		,
 		ReturnType< $mol_view['sub'] >
@@ -47313,6 +47339,10 @@ declare namespace $ {
 		add_open( next?: any ): any
 		Add_icon( ): $mol_icon_plus
 		Add( ): $bog_id_row
+		drop_name( ): string
+		drop_toggle( next?: any ): any
+		Drop_icon( ): $mol_icon_delete
+		Drop( ): $bog_id_row
 		passkey_enter( next?: any ): any
 		Enter_icon( ): $mol_icon_fingerprint
 		Enter( ): $bog_id_row
@@ -47333,6 +47363,7 @@ declare namespace $ {
 		consent_text( ): string
 		Consent_text( ): $mol_paragraph
 		Consent_self( ): $mol_paragraph
+		Self_make( ): $mol_button_major
 		Consent_wait( ): $mol_paragraph
 		approve_title( ): string
 		approve_enabled( ): boolean
@@ -47393,6 +47424,10 @@ declare namespace $ {
 		head_pick( ): string
 		head_own( ): string
 		head_add( ): string
+		head_drop( ): string
+		drop_cancel( ): string
+		drop_sure( ): string
+		drop_lost( ): string
 		move_same( ): string
 		account_locked( ): string
 		account_noname( ): string
@@ -47455,6 +47490,15 @@ declare namespace $.$$ {
         login_rows(): ($mol_view | $.$mol_string | $.$mol_paragraph | $.$bog_id_row)[];
         add_rows(): ($.$mol_paragraph | $mol_button_minor | $.$bog_id_row | $.$bog_id_move)[];
         pick_rows(): ($.$mol_string | $.$mol_list | $.$mol_paragraph | $mol_button_minor | $.$bog_id_row)[];
+        request_rows(): ($.$mol_string | $.$mol_paragraph | $mol_button_minor)[];
+        dropping(next?: boolean): boolean;
+        drop_armed(next?: string): string;
+        drop_toggle(): void;
+        drop_name(): string;
+        drop_pick(lord: string): void;
+        account_drop(lord: string): void;
+        account_leave(lord: string, key: string): void;
+        account_next(): string;
         card_uri(): string;
         profile_rows(): ($.$mol_string | $.$mol_list | $.$mol_paragraph | $.$mol_button_copy | $.$bog_id_row)[];
         moving(next?: boolean): boolean;

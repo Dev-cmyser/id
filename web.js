@@ -42694,6 +42694,24 @@ var $;
 			(obj.face) = () => ([(this.Add_icon())]);
 			return obj;
 		}
+		drop_name(){
+			return (this.$.$mol_locale.text("$bog_id_app_drop_name"));
+		}
+		drop_toggle(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Drop_icon(){
+			const obj = new this.$.$mol_icon_delete();
+			return obj;
+		}
+		Drop(){
+			const obj = new this.$.$bog_id_row();
+			(obj.name) = () => ((this.drop_name()));
+			(obj.click) = (next) => ((this.drop_toggle(next)));
+			(obj.face) = () => ([(this.Drop_icon())]);
+			return obj;
+		}
 		passkey_enter(next){
 			if(next !== undefined) return next;
 			return null;
@@ -42792,6 +42810,12 @@ var $;
 			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Consent_self_title")));
 			return obj;
 		}
+		Self_make(){
+			const obj = new this.$.$mol_button_major();
+			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Self_make_title")));
+			(obj.click) = (next) => ((this.account_make(next)));
+			return obj;
+		}
 		Consent_wait(){
 			const obj = new this.$.$mol_paragraph();
 			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Consent_wait_title")));
@@ -42830,6 +42854,7 @@ var $;
 				(this.Head()), 
 				(this.Accounts()), 
 				(this.Add()), 
+				(this.Drop()), 
 				(this.Enter()), 
 				(this.Make()), 
 				(this.Move_open()), 
@@ -42839,6 +42864,7 @@ var $;
 				(this.Draft()), 
 				(this.Consent_text()), 
 				(this.Consent_self()), 
+				(this.Self_make()), 
 				(this.Consent_wait()), 
 				(this.Approve()), 
 				(this.Reject())
@@ -43092,6 +43118,18 @@ var $;
 		head_add(){
 			return (this.$.$mol_locale.text("$bog_id_app_head_add"));
 		}
+		head_drop(){
+			return (this.$.$mol_locale.text("$bog_id_app_head_drop"));
+		}
+		drop_cancel(){
+			return (this.$.$mol_locale.text("$bog_id_app_drop_cancel"));
+		}
+		drop_sure(){
+			return (this.$.$mol_locale.text("$bog_id_app_drop_sure"));
+		}
+		drop_lost(){
+			return (this.$.$mol_locale.text("$bog_id_app_drop_lost"));
+		}
 		move_same(){
 			return (this.$.$mol_locale.text("$bog_id_app_move_same"));
 		}
@@ -43162,6 +43200,9 @@ var $;
 	($mol_mem(($.$bog_id_app.prototype), "add_open"));
 	($mol_mem(($.$bog_id_app.prototype), "Add_icon"));
 	($mol_mem(($.$bog_id_app.prototype), "Add"));
+	($mol_mem(($.$bog_id_app.prototype), "drop_toggle"));
+	($mol_mem(($.$bog_id_app.prototype), "Drop_icon"));
+	($mol_mem(($.$bog_id_app.prototype), "Drop"));
 	($mol_mem(($.$bog_id_app.prototype), "passkey_enter"));
 	($mol_mem(($.$bog_id_app.prototype), "Enter_icon"));
 	($mol_mem(($.$bog_id_app.prototype), "Enter"));
@@ -43180,6 +43221,7 @@ var $;
 	($mol_mem(($.$bog_id_app.prototype), "Draft"));
 	($mol_mem(($.$bog_id_app.prototype), "Consent_text"));
 	($mol_mem(($.$bog_id_app.prototype), "Consent_self"));
+	($mol_mem(($.$bog_id_app.prototype), "Self_make"));
 	($mol_mem(($.$bog_id_app.prototype), "Consent_wait"));
 	($mol_mem(($.$bog_id_app.prototype), "approve"));
 	($mol_mem(($.$bog_id_app.prototype), "Approve"));
@@ -43241,6 +43283,9 @@ var $;
         }
         static put(data) {
             this.list(this.merge(data));
+        }
+        static drop(lord) {
+            this.list(this.list().filter(data => data.lord !== lord));
         }
     }
     $.$bog_id_account = $bog_id_account;
@@ -43941,17 +43986,58 @@ var $;
             pick_rows() {
                 return [
                     this.Accounts(),
-                    this.Add(),
-                    ...this.request() ? [
-                        ...this.enter_status() ? [this.Enter_status()] : [],
-                        ...this.name() ? [] : [this.Draft()],
-                        this.Consent_text(),
-                        ...this.request_self() ? [this.Consent_self()] : [],
-                        ...this.request_self() || this.synced() ? [] : [this.Consent_wait()],
-                        this.Approve(),
-                        this.Reject(),
-                    ] : [],
+                    ...this.dropping() ? [] : [this.Add()],
+                    ...this.request() ? this.request_rows() : [this.Drop()],
                 ];
+            }
+            request_rows() {
+                if (this.request_self())
+                    return [this.Consent_self(), this.Self_make(), this.Reject()];
+                return [
+                    ...this.enter_status() ? [this.Enter_status()] : [],
+                    ...this.name() ? [] : [this.Draft()],
+                    this.Consent_text(),
+                    ...this.synced() ? [] : [this.Consent_wait()],
+                    this.Approve(),
+                    this.Reject(),
+                ];
+            }
+            dropping(next) {
+                return next ?? false;
+            }
+            drop_armed(next) {
+                return next ?? '';
+            }
+            drop_toggle() {
+                this.drop_armed('');
+                this.dropping(!this.dropping());
+            }
+            drop_name() {
+                return this.dropping() ? this.drop_cancel() : super.drop_name();
+            }
+            drop_pick(lord) {
+                if (this.drop_armed() !== lord) {
+                    this.drop_armed(lord);
+                    return;
+                }
+                this.drop_toggle();
+                $mol_wire_async(this).account_drop(lord);
+            }
+            account_drop(lord) {
+                if (!this.account_current(lord))
+                    return this.$.$bog_id_account.drop(lord);
+                const key = this.account_next();
+                this.home_saving();
+                this.account_leave(lord, key);
+            }
+            account_leave(lord, key) {
+                this.$.$bog_id_account.drop(lord);
+                this.$.$giper_baza_auth.current(this.$.$giper_baza_auth.from(key));
+                this.$.$mol_dom_context.location.reload();
+            }
+            account_next() {
+                const next = this.accounts().find(data => data.key && data.lord !== this.lord());
+                return next?.key ?? this.account_fresh();
             }
             card_uri() {
                 return `https://b-on-g.github.io/dock/card/#!link=${this.lord()}`;
@@ -43994,7 +44080,7 @@ var $;
                     return this.head_add();
                 const request = this.request();
                 if (!request)
-                    return this.head_own();
+                    return this.dropping() ? this.head_drop() : this.head_own();
                 return this.head_pick().replace('{app}', () => request.app.replace(/^https?:\/\//, '').replace(/\/$/, ''));
             }
             adding(next) {
@@ -44041,12 +44127,17 @@ var $;
                 return this.account(lord).name || this.account_noname();
             }
             account_note(lord) {
-                return this.account(lord).key ? lord : this.account_locked();
+                const { key, vault } = this.account(lord);
+                if (this.dropping() && this.drop_armed() === lord)
+                    return vault ? this.drop_sure() : this.drop_lost();
+                return key ? lord : this.account_locked();
             }
             account_tail(lord) {
                 return this.account_current(lord) ? [this.Account_check(lord)] : [];
             }
             account_open(lord) {
+                if (this.dropping() && !this.request())
+                    return this.drop_pick(lord);
                 if (this.account_current(lord))
                     return;
                 if (!this.account(lord).key)
@@ -44063,9 +44154,7 @@ var $;
                 $mol_wire_async(this).account_exit_run();
             }
             account_exit_run() {
-                const next = this.accounts().find(data => data.key && data.lord !== this.lord());
-                const key = next?.key ?? this.account_fresh();
-                this.account_switch(key, '');
+                this.account_switch(this.account_next(), '');
             }
             account_fresh() {
                 const auth = this.$.$giper_baza_auth.grab();
@@ -44402,6 +44491,15 @@ var $;
         ], $bog_id_app.prototype, "request", null);
         __decorate([
             $mol_mem
+        ], $bog_id_app.prototype, "dropping", null);
+        __decorate([
+            $mol_mem
+        ], $bog_id_app.prototype, "drop_armed", null);
+        __decorate([
+            $mol_action
+        ], $bog_id_app.prototype, "account_leave", null);
+        __decorate([
+            $mol_mem
         ], $bog_id_app.prototype, "moving", null);
         __decorate([
             $mol_mem
@@ -44532,6 +44630,12 @@ var $;
             Name: field,
             Draft: field,
             Approve: {
+                ...wide,
+                background: { color: $mol_theme.control },
+                color: '#ffffff',
+                font: { weight: 600 },
+            },
+            Self_make: {
                 ...wide,
                 background: { color: $mol_theme.control },
                 color: '#ffffff',
