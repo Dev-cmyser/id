@@ -104,6 +104,16 @@ namespace $.$$ {
 		Enter_status: note,
 		Bind_status: note,
 
+		Share: { gap: '.5rem' },
+		Share_warning: note,
+		Share_box: {
+			alignSelf: 'center',
+			background: { color: '#ffffff' },
+			border: { radius: '1rem' },
+			padding: '.75rem',
+		},
+		Share_qr: { width: '16rem', maxWidth: '100%', aspectRatio: 1 },
+
 		Grant_head: line,
 		App: line,
 		Grant_title: text,

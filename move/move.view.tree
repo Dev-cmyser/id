@@ -1,0 +1,18 @@
+$bog_id_move $mol_list
+	found? \
+	submit? null
+	rows /
+		<= Scan $bog_keyqr_scan
+			found? <=> found?
+		<= Input $mol_string
+			hint @ \Ключ с другого устройства
+			value? <=> input? \
+			submit? <=> submit?
+		<= Apply $mol_button_major
+			title @ \Войти по ключу
+			click? <=> submit?
+		<= Status $mol_paragraph
+			title <= status? \
+	apply? \
+	status_bad @ \Это не ключ аккаунта
+	status_empty @ \Вставьте ключ или отсканируйте код

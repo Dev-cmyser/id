@@ -177,6 +177,8 @@ namespace $.$$ {
 			return [
 				this.Enter(),
 				this.Make(),
+				this.Move_open(),
+				... this.moving() ? [ this.Move() ] : [],
 				... this.enter_status() ? [ this.Enter_status() ] : [],
 				this.Back(),
 			]
@@ -209,8 +211,35 @@ namespace $.$$ {
 				... this.name() ? [ this.Card_copy() ] : [],
 				this.Bind(),
 				... this.bind_status() ? [ this.Bind_status() ] : [],
+				this.Share_open(),
+				... this.sharing() ? [ this.Share() ] : [],
 				... this.vault() ? [ this.Exit() ] : [],
 			]
+		}
+
+		@ $mol_mem
+		moving( next?: boolean ) {
+			return next ?? false
+		}
+
+		move_toggle() {
+			this.moving( !this.moving() )
+		}
+
+		move_apply( key?: string ) {
+			if( !key ) return ''
+			if( key === this.key() ) this.Move().status( this.move_same() )
+			else $mol_wire_async( this ).account_switch( key )
+			return ''
+		}
+
+		@ $mol_mem
+		sharing( next?: boolean ) {
+			return next ?? false
+		}
+
+		share_toggle() {
+			this.sharing( !this.sharing() )
 		}
 
 		head() {
@@ -233,6 +262,7 @@ namespace $.$$ {
 		add_close() {
 			this.passkey_error( '' )
 			this.restore( null )
+			this.moving( false )
 			this.adding( false )
 		}
 

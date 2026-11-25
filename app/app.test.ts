@@ -85,6 +85,25 @@ namespace $.$$ {
 
 		},
 
+		'moved key switches account, own key is not applied'( $ ) {
+
+			const app = $bog_id_app.make({ $ })
+			const switched = [] as string[]
+			app.account_switch = key => { switched.push( key ) }
+
+			$mol_assert_equal( app.add_rows().includes( app.Move() ), false )
+			app.move_toggle()
+			$mol_assert_equal( app.add_rows().includes( app.Move() ), true )
+
+			app.move_apply( app.key() )
+			$mol_assert_equal( app.Move().status(), app.move_same() )
+			$mol_assert_equal( switched, [] )
+
+			app.move_apply( 'other' )
+			$mol_assert_equal( switched, [ 'other' ] )
+
+		},
+
 	})
 
 }

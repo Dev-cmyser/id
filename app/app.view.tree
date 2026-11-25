@@ -44,6 +44,14 @@ $bog_id_app $mol_scroll
 							click? <=> account_make? null
 							face /
 								<= Make_icon $mol_icon_account_plus
+						<= Move_open $bog_id_row
+							name @ \Перенести ключ
+							note @ \Отсканировать код или вставить ключ с другого устройства
+							click? <=> move_toggle? null
+							face /
+								<= Move_icon $mol_icon_qrcode_scan
+						<= Move $bog_id_move
+							apply? <=> move_apply? \
 						<= Back $mol_button_minor
 							title @ \Назад
 							click? <=> add_close? null
@@ -83,6 +91,24 @@ $bog_id_app $mol_scroll
 								<= Bind_icon $mol_icon_fingerprint
 						<= Bind_status $mol_paragraph
 							title <= bind_status \
+						<= Share_open $bog_id_row
+							name @ \Перенести на другое устройство
+							note @ \Показать ключ кодом
+							click? <=> share_toggle? null
+							face /
+								<= Share_icon $mol_icon_qrcode
+						<= Share $mol_list
+							rows /
+								<= Share_warning $mol_paragraph
+									title @ \Ключ даёт полный доступ к аккаунту. Показывайте его только своему устройству
+								<= Share_box $mol_view
+									sub /
+										<= Share_qr $bog_qr
+											uri <= key \
+											error_correction \L
+								<= Share_copy $mol_button_copy
+									title @ \Скопировать ключ
+									text <= key
 						<= Exit $bog_id_row
 							name @ \Выйти на этом устройстве
 							note @ \Вернуться можно по биометрии
@@ -115,6 +141,7 @@ $bog_id_app $mol_scroll
 	head_pick @ \Выберите аккаунт для входа в {app}
 	head_own @ \Ваши аккаунты
 	head_add @ \Добавление аккаунта
+	move_same @ \Этот аккаунт уже открыт здесь
 	account_locked @ \Нужен вход по биометрии
 	account_noname @ \Без имени
 	approve_as @ \Войти как {name}
