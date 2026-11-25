@@ -2185,8 +2185,168 @@ $bog_id_row $mol_button_minor
 
 $mol_icon_account_plus $mol_icon path \M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z
 
+$mol_icon_qrcode $mol_icon path \M3,11H5V13H3V11M11,5H13V9H11V5M9,11H13V15H11V13H9V11M15,11H17V13H19V11H21V13H19V15H21V19H19V21H17V19H13V21H11V17H15V15H17V13H15V11M19,19V15H17V19H19M15,3H21V9H15V3M17,5V7H19V5H17M3,3H9V9H3V3M5,5V7H7V5H5M3,15H9V21H3V15M5,17V19H7V17H5Z
+
+$mol_icon_qrcode_scan $mol_icon path \M4,4H10V10H4V4M20,4V10H14V4H20M14,15H16V13H14V11H16V13H18V11H20V13H18V15H20V18H18V20H16V18H13V20H11V16H14V15M16,15V18H18V15H16M4,20V14H10V20H4M6,6V8H8V6H6M16,6V8H18V6H16M6,16V18H8V16H6M4,11H6V13H4V11M9,11H13V15H11V13H9V11M11,6H13V10H11V6M2,2V6H0V2A2,2 0 0,1 2,0H6V2H2M22,0A2,2 0 0,1 24,2V6H22V2H18V0H22M2,18V22H6V24H2A2,2 0 0,1 0,22V18H2M22,22V18H24V22A2,2 0 0,1 22,24H18V22H22Z
+
+$mol_video_player $mol_view
+	dom_name \video
+	playing? false
+	play null
+	pause null
+	volume? 0
+	time? 0
+	duration 0
+	attr *
+		src <= uri \
+		controls <= controls true
+		autoplay <= autoplay true
+		playsinline <= inline true
+		loop <= loop false
+		muted <= muted false
+		poster <= poster \
+	field *
+		srcObject <= stream null
+	event *
+		volumechange? <=> revolume? null
+		timeupdate? <=> retime? null
+		durationchange? <=> redurate? null
+		playing? <=> playing_event? null
+		play? <=> play_event? null
+		pause? <=> pause_event? null
+
+$mol_video_camera $mol_video_player
+	controls false
+	style *
+		transform <= transform \
+	video_constraints *
+		facingMode <= facing \user
+		aspectRatio <= aspect 1
+		width * ideal <= width <= size 720
+		height * ideal <= height <= size
+	video_settings *
+		brightness <= brightness 128
+		sharpness <= sharpness 2
+		contrast <= contrast 32
+		saturation <= saturation 64
+		advanced /
+			* colorTemperature <= temperature 4000
+			* torch <= torch false
+
+
+$bog_keyqr_scan $mol_view
+	scanning? false
+	found? \
+	sub /
+		<= Toggle $mol_check
+			title @ \Сканировать QR
+			checked? <=> scanning?
+		<= Camera $mol_video_camera
+			facing \environment
+			muted true
+
 $mol_button_major $mol_button_minor
 	theme \$mol_theme_base
+
+$bog_qr $mol_svg_root
+	uri \
+	module_radius 0.35
+	finder_radius 1.2
+	gradient_angle 45
+	error_correction \M
+	quiet_zone 2
+	center /
+	gradient_id \qr-grad
+	gradient_fill \url(#qr-grad)
+	gradient_stops /
+		\var(--mol_theme_special)
+		\var(--mol_theme_focus)
+	Stop* $mol_svg
+		dom_name \stop
+		attr *
+			^
+			offset <= stop_offset* \0%
+			stop-color <= stop_color* \
+	view_box <= qr_view_box \0 0 1 1
+	sub /
+		<= Defs $mol_svg
+			dom_name \defs
+			sub /
+				<= Gradient $mol_svg
+					dom_name \linearGradient
+					attr *
+						^
+						id <= gradient_id
+						x1 <= grad_x1 \0
+						y1 <= grad_y1 \0
+						x2 <= grad_x2 \1
+						y2 <= grad_y2 \1
+					sub <= gradient_stop_list /
+		<= Modules $mol_svg_path
+			geometry <= modules_d \
+			attr *
+				^
+				fill <= gradient_fill
+		<= Rings $mol_svg_path
+			geometry <= rings_d \
+			attr *
+				^
+				fill <= gradient_fill
+				fill-rule \evenodd
+		<= Centers $mol_svg_path
+			geometry <= centers_d \
+			attr *
+				^
+				fill <= gradient_fill
+		<= Center_wrap $mol_svg
+			dom_name \foreignObject
+			attr *
+				^
+				x <= center_x \0
+				y <= center_y \0
+				width <= center_size \0
+				height <= center_size
+			sub /
+				<= Center_body $mol_view
+					sub <= center
+
+$bog_keyqr $mol_list
+	key \
+	found? \
+	shown? false
+	rows /
+		<= Show $mol_check
+			title @ \Показать ключ
+			checked? <=> shown?
+		<= Warning $mol_paragraph
+			title @ \Ключ даёт полный доступ к аккаунту. Показывайте его только своему устройству.
+		<= Qr $bog_qr
+			uri <= key
+			error_correction \L
+		<= Copy $mol_button_copy
+			title @ \Скопировать ключ
+			text <= key
+		<= Scan $bog_keyqr_scan
+			found? <=> found?
+
+$bog_id_move $mol_list
+	found? \
+	submit? null
+	rows /
+		<= Scan $bog_keyqr_scan
+			found? <=> found?
+		<= Input $mol_string
+			hint @ \Ключ с другого устройства
+			value? <=> input? \
+			submit? <=> submit?
+		<= Apply $mol_button_major
+			title @ \Войти по ключу
+			click? <=> submit?
+		<= Status $mol_paragraph
+			title <= status? \
+	apply? \
+	status_bad @ \Это не ключ аккаунта
+	status_empty @ \Вставьте ключ или отсканируйте код
 
 $mol_icon_logout $mol_icon path \M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12M4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z
 
@@ -2236,6 +2396,14 @@ $bog_id_app $mol_scroll
 							click? <=> account_make? null
 							face /
 								<= Make_icon $mol_icon_account_plus
+						<= Move_open $bog_id_row
+							name @ \Перенести ключ
+							note @ \Отсканировать код или вставить ключ с другого устройства
+							click? <=> move_toggle? null
+							face /
+								<= Move_icon $mol_icon_qrcode_scan
+						<= Move $bog_id_move
+							apply? <=> move_apply? \
 						<= Back $mol_button_minor
 							title @ \Назад
 							click? <=> add_close? null
@@ -2275,6 +2443,24 @@ $bog_id_app $mol_scroll
 								<= Bind_icon $mol_icon_fingerprint
 						<= Bind_status $mol_paragraph
 							title <= bind_status \
+						<= Share_open $bog_id_row
+							name @ \Перенести на другое устройство
+							note @ \Показать ключ кодом
+							click? <=> share_toggle? null
+							face /
+								<= Share_icon $mol_icon_qrcode
+						<= Share $mol_list
+							rows /
+								<= Share_warning $mol_paragraph
+									title @ \Ключ даёт полный доступ к аккаунту. Показывайте его только своему устройству
+								<= Share_box $mol_view
+									sub /
+										<= Share_qr $bog_qr
+											uri <= key \
+											error_correction \L
+								<= Share_copy $mol_button_copy
+									title @ \Скопировать ключ
+									text <= key
 						<= Exit $bog_id_row
 							name @ \Выйти на этом устройстве
 							note @ \Вернуться можно по биометрии
@@ -2307,6 +2493,7 @@ $bog_id_app $mol_scroll
 	head_pick @ \Выберите аккаунт для входа в {app}
 	head_own @ \Ваши аккаунты
 	head_add @ \Добавление аккаунта
+	move_same @ \Этот аккаунт уже открыт здесь
 	account_locked @ \Нужен вход по биометрии
 	account_noname @ \Без имени
 	approve_as @ \Войти как {name}

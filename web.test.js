@@ -7534,6 +7534,65 @@ var $;
 "use strict";
 var $;
 (function ($_1) {
+    var $$;
+    (function ($$) {
+        $mol_test({
+            'Ключ виден только по запросу, отсканированное уходит наружу'($) {
+                const empty = $bog_keyqr.make({ $ });
+                $mol_assert_equal(empty.rows(), [empty.Scan()]);
+                const box = $bog_keyqr.make({ $, key: () => 'secret' });
+                $mol_assert_equal(box.rows(), [box.Show(), box.Scan()]);
+                box.Show().checked(true);
+                $mol_assert_equal(box.rows(), [box.Show(), box.Warning(), box.Qr(), box.Copy(), box.Scan()]);
+                $mol_assert_equal(box.Qr().uri(), 'secret');
+                box.Scan().found('other');
+                $mol_assert_equal(box.found(), 'other');
+            },
+        });
+    })($$ = $_1.$$ || ($_1.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($_1) {
+    var $$;
+    (function ($$) {
+        $mol_test({
+            async 'key is taken from text and from link, broken one is rejected'($) {
+                const auth = await $.$giper_baza_auth._generate();
+                const alien = await $.$giper_baza_auth._generate();
+                const key = auth.toString() + auth.toStringPrivate();
+                $mol_assert_equal(await $.$bog_id_move_key(` ${key}\n`), key);
+                $mol_assert_equal(await $.$bog_id_move_key(`https://x.y/#!account=${encodeURIComponent(key)}`), key);
+                $mol_assert_equal(await $.$bog_id_move_key(''), '');
+                $mol_assert_equal(await $.$bog_id_move_key('не ключ'), '');
+                $mol_assert_equal(await $.$bog_id_move_key(key.slice(0, -8)), '');
+                $mol_assert_equal(await $.$bog_id_move_key(auth.toString() + alien.toStringPrivate()), '');
+            },
+            async 'scanned key is applied, alien code gives error'($) {
+                const auth = await $.$giper_baza_auth._generate();
+                const key = auth.toString() + auth.toStringPrivate();
+                const applied = [];
+                const move = $bog_id_move.make({ $, apply: (next) => {
+                        if (next)
+                            applied.push(next);
+                        return '';
+                    } });
+                await move.enter('https://example.org/');
+                $mol_assert_equal(move.status(), move.status_bad());
+                await move.enter(key);
+                $mol_assert_equal(move.status(), '');
+                $mol_assert_equal(applied, [key]);
+            },
+        });
+    })($$ = $_1.$$ || ($_1.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($_1) {
     $mol_test({
         async 'vault opens with same key only'($) {
             const auth = await $.$giper_baza_auth._generate();
@@ -7679,6 +7738,19 @@ var $;
                 $mol_assert_equal(pointer.lord_rank(one.lord()), $giper_baza_rank_deny);
                 $mol_assert_equal(next.Data($giper_baza_atom_text).val(), 'hello');
                 $mol_assert_equal(app.grant_apps(grant), [two.toString()]);
+            },
+            'moved key switches account, own key is not applied'($) {
+                const app = $bog_id_app.make({ $ });
+                const switched = [];
+                app.account_switch = key => { switched.push(key); };
+                $mol_assert_equal(app.add_rows().includes(app.Move()), false);
+                app.move_toggle();
+                $mol_assert_equal(app.add_rows().includes(app.Move()), true);
+                app.move_apply(app.key());
+                $mol_assert_equal(app.Move().status(), app.move_same());
+                $mol_assert_equal(switched, []);
+                app.move_apply('other');
+                $mol_assert_equal(switched, ['other']);
             },
         });
     })($$ = $_1.$$ || ($_1.$$ = {}));
