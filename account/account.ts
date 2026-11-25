@@ -28,6 +28,10 @@ namespace $ {
 			this.list( this.merge( data ) )
 		}
 
+		static drop( lord: string ) {
+			this.list( this.list().filter( data => data.lord !== lord ) )
+		}
+
 	}
 
 }

@@ -187,17 +187,71 @@ namespace $.$$ {
 		pick_rows() {
 			return [
 				this.Accounts(),
-				this.Add(),
-				... this.request() ? [
-					... this.enter_status() ? [ this.Enter_status() ] : [],
-					... this.name() ? [] : [ this.Draft() ],
-					this.Consent_text(),
-					... this.request_self() ? [ this.Consent_self() ] : [],
-					... this.request_self() || this.synced() ? [] : [ this.Consent_wait() ],
-					this.Approve(),
-					this.Reject(),
-				] : [],
+				... this.dropping() ? [] : [ this.Add() ],
+				... this.request() ? this.request_rows() : [ this.Drop() ],
 			]
+		}
+
+		request_rows() {
+			if( this.request_self() ) return [ this.Consent_self(), this.Self_make(), this.Reject() ]
+			return [
+				... this.enter_status() ? [ this.Enter_status() ] : [],
+				... this.name() ? [] : [ this.Draft() ],
+				this.Consent_text(),
+				... this.synced() ? [] : [ this.Consent_wait() ],
+				this.Approve(),
+				this.Reject(),
+			]
+		}
+
+		@ $mol_mem
+		dropping( next?: boolean ) {
+			return next ?? false
+		}
+
+		@ $mol_mem
+		drop_armed( next?: string ) {
+			return next ?? ''
+		}
+
+		drop_toggle() {
+			this.drop_armed( '' )
+			this.dropping( !this.dropping() )
+		}
+
+		drop_name() {
+			return this.dropping() ? this.drop_cancel() : super.drop_name()
+		}
+
+		drop_pick( lord: string ) {
+
+			if( this.drop_armed() !== lord ) {
+				this.drop_armed( lord )
+				return
+			}
+
+			this.drop_toggle()
+			$mol_wire_async( this ).account_drop( lord )
+
+		}
+
+		account_drop( lord: string ) {
+			if( !this.account_current( lord ) ) return this.$.$bog_id_account.drop( lord )
+			const key = this.account_next()
+			this.home_saving()
+			this.account_leave( lord, key )
+		}
+
+		@ $mol_action
+		account_leave( lord: string, key: string ) {
+			this.$.$bog_id_account.drop( lord )
+			this.$.$giper_baza_auth.current( this.$.$giper_baza_auth.from( key ) )
+			this.$.$mol_dom_context.location.reload()
+		}
+
+		account_next() {
+			const next = this.accounts().find( data => data.key && data.lord !== this.lord() )
+			return next?.key ?? this.account_fresh()
 		}
 
 		card_uri() {
@@ -245,7 +299,7 @@ namespace $.$$ {
 		head() {
 			if( this.adding() ) return this.head_add()
 			const request = this.request()
-			if( !request ) return this.head_own()
+			if( !request ) return this.dropping() ? this.head_drop() : this.head_own()
 			return this.head_pick().replace( '{app}', ()=> request.app.replace( /^https?:\/\//, '' ).replace( /\/$/, '' ) )
 		}
 
@@ -305,7 +359,9 @@ namespace $.$$ {
 		}
 
 		account_note( lord: string ) {
-			return this.account( lord ).key ? lord : this.account_locked()
+			const { key, vault } = this.account( lord )
+			if( this.dropping() && this.drop_armed() === lord ) return vault ? this.drop_sure() : this.drop_lost()
+			return key ? lord : this.account_locked()
 		}
 
 		account_tail( lord: string ) {
@@ -313,6 +369,7 @@ namespace $.$$ {
 		}
 
 		account_open( lord: string ) {
+			if( this.dropping() && !this.request() ) return this.drop_pick( lord )
 			if( this.account_current( lord ) ) return
 			if( !this.account( lord ).key ) return this.passkey_enter()
 			$mol_wire_async( this ).account_switch( this.account( lord ).key )
@@ -331,9 +388,7 @@ namespace $.$$ {
 		}
 
 		account_exit_run() {
-			const next = this.accounts().find( data => data.key && data.lord !== this.lord() )
-			const key = next?.key ?? this.account_fresh()
-			this.account_switch( key, '' )
+			this.account_switch( this.account_next(), '' )
 		}
 
 		account_fresh() {

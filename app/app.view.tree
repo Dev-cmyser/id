@@ -32,6 +32,11 @@ $bog_id_app $mol_scroll
 							click? <=> add_open? null
 							face /
 								<= Add_icon $mol_icon_plus
+						<= Drop $bog_id_row
+							name <= drop_name @ \Удалить аккаунт
+							click? <=> drop_toggle? null
+							face /
+								<= Drop_icon $mol_icon_delete
 						<= Enter $bog_id_row
 							name @ \Войти по биометрии
 							note @ \Отпечаток, лицо или ключ доступа
@@ -63,7 +68,10 @@ $bog_id_app $mol_scroll
 						<= Consent_text $mol_paragraph
 							title <= consent_text \
 						<= Consent_self $mol_paragraph
-							title @ \Это ваш собственный ключ: войдите из приложения с отдельным ключом
+							title @ \У приложения тот же ключ, что у этого аккаунта ID. Нужен отдельный ID: аккаунт приложения останется прежним, его ключ можно будет сохранить в новый ID
+						<= Self_make $mol_button_major
+							title @ \Создать отдельный ID
+							click? <=> account_make?
 						<= Consent_wait $mol_paragraph
 							title @ \Ждём данные аккаунта из Гипер Базы…
 						<= Approve $mol_button_major
@@ -141,7 +149,11 @@ $bog_id_app $mol_scroll
 	head_pick @ \Выберите аккаунт для входа в {app}
 	head_own @ \Ваши аккаунты
 	head_add @ \Добавление аккаунта
-	move_same @ \Этот аккаунт уже открыт здесь
+	head_drop @ \Какой аккаунт удалить с этого устройства?
+	drop_cancel @ \Не удалять
+	drop_sure @ \Нажмите ещё раз, чтобы удалить. Вернуться можно по биометрии
+	drop_lost @ \Нажмите ещё раз, чтобы удалить. Без сохранённого ключа вернуть аккаунт нельзя
+	move_same @\Этот аккаунт уже открыт здесь
 	account_locked @ \Нужен вход по биометрии
 	account_noname @ \Без имени
 	approve_as @ \Войти как {name}

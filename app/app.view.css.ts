@@ -96,6 +96,13 @@ namespace $.$$ {
 			font: { weight: 600 },
 		},
 
+		Self_make: {
+			... wide,
+			background: { color: $mol_theme.control },
+			color: '#ffffff',
+			font: { weight: 600 },
+		},
+
 		Reject: wide,
 		Back: wide,
 
